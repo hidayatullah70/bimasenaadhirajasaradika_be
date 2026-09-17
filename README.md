@@ -151,3 +151,32 @@ VITE_USE_REAL_API=true
 VITE_API_BASE_URL=http://localhost:5000/api/v1
 ```
 Dengan konfigurasi ini, frontend akan otomatis beralih dari mode *mock* ke backend REST API Express yang sebenarnya.
+
+---
+
+## Postman Collection (`collection.json`)
+
+File [collection.json](collection.json) telah disediakan di root direktori backend untuk mempermudah pengujian seluruh endpoint CRUD API via **Postman**:
+
+### Cara Import ke Postman:
+1. Buka aplikasi **Postman**.
+2. Klik tombol **Import** (di kiri atas).
+3. Pilih file `collection.json` dari folder `backend/`.
+4. Koleksi **"PT. Bhimasena Adhirajasa Radhika - Backend REST API"** akan otomatis muncul dengan seluruh folder CRUD terstruktur:
+   - `00. Server & Health Check`
+   - `01. Authentication` (Dilengkapi auto-save JWT token ke variabel `{{token}}` saat login)
+   - `02. Dashboard Summary`
+   - `03. Employees (CRUD)`
+   - `04. Clients (CRUD)`
+   - `05. Sites / Lokasi Kerja (CRUD)`
+   - `06. Services / Layanan (CRUD)`
+   - `07. Placements / Penempatan (CRUD)`
+   - `08. Attendance / Presensi (CRUD)`
+   - `09. Invoices / Keuangan (CRUD)`
+   - `10. Leads / Marketing (CRUD)`
+   - `11. Activities & Audit Log`
+   - `12. Notifications`
+   - `13. Users & Roles Management (Direktur Only)`
+   - `14. Public Endpoints (Landing Page)`
+5. Jalankan request **Login - Direktur** terlebih dahulu agar token tersimpan otomatis di variabel koleksi, kemudian Anda dapat langsung mengeksekusi endpoint CRUD lainnya tanpa repot menyalin token manual.
+

@@ -1,0 +1,1161 @@
+{
+  "info": {
+    "_postman_id": "bhimasena-backend-collection-v1",
+    "name": "PT. Bhimasena Adhirajasa Radhika - Backend REST API",
+    "description": "Koleksi lengkap Postman untuk semua endpoint CRUD dan autentikasi Backend REST API PT. Bhimasena Adhirajasa Radhika.\n\nSOT Reference:\n- 01-PRD.md\n- 02-USER-FLOW.md\n- 04-API-SPEC.md\n- 06. BUSINESS-RULES.md\n- 07. DATABASE-SPEC.md",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "00. Server & Health Check",
+      "item": [
+        {
+          "name": "Root Server Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            }
+          }
+        },
+        {
+          "name": "API v1 Directory Index",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1"]
+            }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "01. Authentication",
+      "item": [
+        {
+          "name": "Login - Direktur (Auto-save Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "    console.log('Token saved to collection variable:', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"direktur@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login - HRD",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"hrd@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login - Finance",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"finance@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login - Marketing",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"marketing@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login - Operasional",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"operasional@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile (Me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. Dashboard Summary",
+      "item": [
+        {
+          "name": "Get Dashboard KPI Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard/summary?role=direktur",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dashboard", "summary"],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "direktur"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. Employees (CRUD)",
+      "item": [
+        {
+          "name": "Get All Employees (Filter & Pagination)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees?page=1&limit=10&status=active&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "status", "value": "active" },
+                { "key": "search", "value": "" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Employee by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik\": \"EMP-2026-0099\",\n  \"name\": \"Budi Santoso\",\n  \"email\": \"budi.santoso@example.com\",\n  \"phone\": \"081234567899\",\n  \"position\": \"Security Guard\",\n  \"division\": \"Operasional\",\n  \"join_date\": \"2026-01-15\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees"]
+            }
+          }
+        },
+        {
+          "name": "Update Employee (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"position\": \"Senior Security Guard\",\n  \"phone\": \"081299998888\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. Clients (CRUD)",
+      "item": [
+        {
+          "name": "Get All Clients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients?page=1&limit=10&status=active&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "status", "value": "active" },
+                { "key": "search", "value": "" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Client by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Client",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"PT. Nusantara Graha Pratama\",\n  \"company\": \"Nusantara Group\",\n  \"email\": \"procurement@nusantaragraha.com\",\n  \"phone\": \"021-5551234\",\n  \"address\": \"Gedung Nusantara Tower Lt. 15, Sudirman, Jakarta\",\n  \"industry\": \"Real Estate\",\n  \"contract_start\": \"2026-03-01\",\n  \"contract_end\": \"2027-02-28\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients"]
+            }
+          }
+        },
+        {
+          "name": "Update Client (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"021-5554321\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Client",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. Sites / Lokasi Kerja (CRUD)",
+      "item": [
+        {
+          "name": "Get All Sites",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sites?client_id=&status=active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sites"],
+              "query": [
+                { "key": "client_id", "value": "" },
+                { "key": "status", "value": "active" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Site by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sites/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sites", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Site",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": 1,\n  \"name\": \"Gedung Cyber 2 Lantai GF - 10\",\n  \"address\": \"Jl. H.R. Rasuna Said Blok X-5, Kuningan\",\n  \"city\": \"Jakarta Selatan\",\n  \"required_personnel\": 8,\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sites",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sites"]
+            }
+          }
+        },
+        {
+          "name": "Update Site (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"required_personnel\": 10,\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sites/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sites", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Site",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sites/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sites", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. Services / Layanan (CRUD)",
+      "item": [
+        {
+          "name": "Get All Services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "services"]
+            }
+          }
+        },
+        {
+          "name": "Get Service by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/services/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "services", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Service",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"VALET\",\n  \"name\": \"Valet & Parking Management\",\n  \"description\": \"Layanan operasional valet parking terpercaya dengan SOP profesional.\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "services"]
+            }
+          }
+        },
+        {
+          "name": "Update Service (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Deskripsi layanan valet terbaru.\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/services/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "services", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Service",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/services/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "services", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "07. Placements / Penempatan (CRUD)",
+      "item": [
+        {
+          "name": "Get All Placements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/placements?client_id=&site_id=&status=active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "placements"],
+              "query": [
+                { "key": "client_id", "value": "" },
+                { "key": "site_id", "value": "" },
+                { "key": "status", "value": "active" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Placement by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/placements/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "placements", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Placement",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee_id\": 1,\n  \"client_id\": 1,\n  \"site_id\": 1,\n  \"service_id\": 1,\n  \"shift\": \"pagi\",\n  \"start_date\": \"2026-03-01\",\n  \"end_date\": \"2027-02-28\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/placements",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "placements"]
+            }
+          }
+        },
+        {
+          "name": "Update Placement (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shift\": \"malam\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/placements/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "placements", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Placement",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/placements/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "placements", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "08. Attendance / Presensi (CRUD)",
+      "item": [
+        {
+          "name": "Get Attendance Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance?date=&status=&site_id=&employee_id=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance"],
+              "query": [
+                { "key": "date", "value": "" },
+                { "key": "status", "value": "" },
+                { "key": "site_id", "value": "" },
+                { "key": "employee_id", "value": "" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Today Attendance Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/today",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "today"]
+            }
+          }
+        },
+        {
+          "name": "Get Attendance by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "1"]
+            }
+          }
+        },
+        {
+          "name": "Record Attendance (Clock In)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee_id\": 1,\n  \"site_id\": 1,\n  \"attendance_date\": \"2026-09-17\",\n  \"clock_in\": \"07:55:00\",\n  \"status\": \"present\",\n  \"notes\": \"Tepat waktu\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance"]
+            }
+          }
+        },
+        {
+          "name": "Update Attendance (Clock Out / Status)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clock_out\": \"17:05:00\",\n  \"notes\": \"Selesai shift normal\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "09. Invoices / Keuangan (CRUD)",
+      "item": [
+        {
+          "name": "Get All Invoices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/invoices?page=1&limit=10&status=&client_id=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "invoices"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "status", "value": "" },
+                { "key": "client_id", "value": "" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Invoice by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/invoices/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "invoices", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Invoice",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": 1,\n  \"invoice_no\": \"INV-2026-09-009\",\n  \"invoice_date\": \"2026-09-17\",\n  \"due_date\": \"2026-10-17\",\n  \"subtotal\": 45000000,\n  \"tax\": 4950000,\n  \"total\": 49950000,\n  \"status\": \"issued\",\n  \"notes\": \"Tagihan layanan outsourcing September 2026\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/invoices",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "invoices"]
+            }
+          }
+        },
+        {
+          "name": "Update Invoice Status (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"paid\",\n  \"notes\": \"Lunas ditransfer via Mandiri\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/invoices/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "invoices", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Invoice",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/invoices/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "invoices", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Leads / Marketing (CRUD)",
+      "item": [
+        {
+          "name": "Get All Leads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leads?page=1&limit=10&status=&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leads"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "status", "value": "" },
+                { "key": "search", "value": "" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Lead by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leads/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leads", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Lead",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"PT. Mega Sentosa Industri\",\n  \"contact_name\": \"Hendra Kusuma\",\n  \"email\": \"hendra@megasentosa.com\",\n  \"phone\": \"081399887766\",\n  \"estimated_value\": 120000000,\n  \"status\": \"new\",\n  \"source\": \"Website Landing Page\",\n  \"notes\": \"Membutuhkan 15 personil security dan 5 cleaning service\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leads",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leads"]
+            }
+          }
+        },
+        {
+          "name": "Update Lead (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"proposal_sent\",\n  \"estimated_value\": 125000000,\n  \"notes\": \"Proposal penawaran resmi telah dikirim ke manajemen klien\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leads/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leads", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Lead",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leads/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leads", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Activities & Audit Log",
+      "item": [
+        {
+          "name": "Get Audit Log Activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/activities?page=1&limit=20&user_id=&action=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "activities"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "user_id", "value": "" },
+                { "key": "action", "value": "" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Activity by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/activities/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "activities", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. Notifications",
+      "item": [
+        {
+          "name": "Get Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications?is_read=&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications"],
+              "query": [
+                { "key": "is_read", "value": "" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark Single Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/1/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "1", "read"]
+            }
+          }
+        },
+        {
+          "name": "Mark All Notifications as Read",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/mark-all-read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "mark-all-read"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. Users & Roles Management (Direktur Only)",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users?page=1&limit=10&role_id=&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "role_id", "value": "" },
+                { "key": "search", "value": "" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Master Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "roles"]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Staf HRD Baru\",\n  \"email\": \"hrd.staff2@bhimasena.co.id\",\n  \"password\": \"password123\",\n  \"role_id\": 2,\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users"]
+            }
+          }
+        },
+        {
+          "name": "Update User (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Staf HRD Terupdate\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "14. Public Endpoints (Landing Page)",
+      "item": [
+        {
+          "name": "Get Public Services List",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "services"]
+            }
+          }
+        },
+        {
+          "name": "Submit Public Lead Form",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"PT. Mitra Sejahtera Bersama\",\n  \"contact_name\": \"Ibu Ratna Dewi\",\n  \"email\": \"ratna@mitrasejahtera.co.id\",\n  \"phone\": \"081122334455\",\n  \"service_interest\": \"Security & Guard Services\",\n  \"message\": \"Mohon informasi penawaran pengadaan personil keamanan dan cleaning service untuk gedung baru kami di Cilandak.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/lead",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "lead"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
