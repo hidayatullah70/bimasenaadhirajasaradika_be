@@ -154,6 +154,57 @@ Dengan konfigurasi ini, frontend akan otomatis beralih dari mode *mock* ke backe
 
 ---
 
+## Panduan Deployment ke Railway.app (1 Project: Database & API)
+
+Backend ini sudah dikonfigurasi secara *native* agar kompatibel penuh dengan arsitektur **Railway.app** (otomatis mendeteksi variabel `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`, atau `MYSQL_URL` / `DATABASE_URL`).
+
+### Langkah-langkah Deploy di Railway:
+
+#### 1. Buat Project Baru di Railway
+1. Login ke dashboard [railway.com](https://railway.com).
+2. Klik tombol **`+ New Project`**.
+
+#### 2. Tambahkan Service 1: MySQL Database
+1. Di dalam project baru tersebut, klik **`+ New`** ➜ **`Database`** ➜ Pilih **`Add MySQL`**.
+2. Railway akan otomatis membuatkan service MySQL dan menyediakan kredensial internal.
+
+#### 3. Tambahkan Service 2: Express Backend REST API
+1. Di project yang sama, klik **`+ New`** ➜ **`GitHub Repo`**.
+2. Pilih repository: `hidayatullah70/bimasenaadhirajasaradika_be`.
+3. Buka tab **Variables** pada service API tersebut, lalu tambahkan environment variables berikut (menggunakan *Railway Reference*):
+   - `DB_HOST`: `${{MySQL.MYSQLHOST}}`
+   - `DB_PORT`: `${{MySQL.MYSQLPORT}}`
+   - `DB_USER`: `${{MySQL.MYSQLUSER}}`
+   - `DB_PASSWORD`: `${{MySQL.MYSQLPASSWORD}}`
+   - `DB_NAME`: `${{MySQL.MYSQLDATABASE}}`
+   - `JWT_SECRET`: `bhimasena_secret_jwt_key_2026_barak_secure`
+   - `JWT_EXPIRES_IN`: `7d`
+   - `CORS_ORIGIN`: `*`
+   *(Catatan: Anda juga cukup mengisi `DATABASE_URL: ${{MySQL.MYSQL_URL}}` karena backend otomatis membaca format URL)*.
+
+#### 4. Import / Inisialisasi Database Schema & Seed Data di Railway
+Ada 2 cara mudah:
+- **Cara A (Melalui Tab Query MySQL Railway)**:
+  1. Klik service **MySQL** di Railway ➜ Buka tab **Data** / **Query**.
+  2. Buka file [database/database.sql](database/database.sql), salin seluruh isinya, lalu *paste* dan jalankan di editor Query Railway.
+- **Cara B (Melalui Railway CLI / Command)**:
+  Jalankan perintah: `npm run db:init` di environment Railway.
+
+#### 5. Generate Domain Publik API
+1. Klik service **API Backend** di Railway.
+2. Masuk ke tab **Settings** ➜ bagian **Networking** ➜ Klik tombol **`Generate Domain`**.
+3. Anda akan mendapatkan URL publik HTTPS resmi (contoh: `https://bimasenaadhirajasaradika-be-production.up.railway.app`).
+
+#### 6. Hubungkan ke Frontend & Hoppscotch
+- Pada project frontend (`.env`):
+  ```ini
+  VITE_API_BASE_URL=https://<DOMAIN-RAILWAY-ANDA>.up.railway.app/api/v1
+  ```
+- Pada Hoppscotch:
+  Cukup ubah variabel environment `baseUrl` menjadi URL Railway tersebut!
+
+---
+
 ## API Client Collection (`collection.json`)
 
 Project ini menyediakan file koleksi standar [collection.json](collection.json) yang dapat langsung diimport ke **Hoppscotch** maupun **Postman** untuk menguji seluruh endpoint CRUD:

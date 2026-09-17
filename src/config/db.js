@@ -3,20 +3,39 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || '127.0.0.1',
-  port: parseInt(process.env.DB_PORT || '3306', 10),
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'barak_db',
-  waitForConnections: true,
-  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || '10', 10),
-  queueLimit: 0,
-  enableKeepAlive: true,
-  keepAliveInitialDelay: 0,
-  timezone: '+07:00', // Waktu Indonesia Barat (WIB)
-  dateStrings: true
-});
+const host = process.env.MYSQLHOST || process.env.DB_HOST || '127.0.0.1';
+const port = parseInt(process.env.MYSQLPORT || process.env.DB_PORT || '3306', 10);
+const user = process.env.MYSQLUSER || process.env.DB_USER || 'root';
+const password = process.env.MYSQLPASSWORD !== undefined ? process.env.MYSQLPASSWORD : (process.env.DB_PASSWORD || '');
+const database = process.env.MYSQLDATABASE || process.env.DB_NAME || 'barak_db';
+
+const poolConfig = process.env.DATABASE_URL || process.env.MYSQL_URL
+  ? {
+      uri: process.env.DATABASE_URL || process.env.MYSQL_URL,
+      waitForConnections: true,
+      connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || '10', 10),
+      queueLimit: 0,
+      enableKeepAlive: true,
+      keepAliveInitialDelay: 0,
+      timezone: '+07:00',
+      dateStrings: true
+    }
+  : {
+      host,
+      port,
+      user,
+      password,
+      database,
+      waitForConnections: true,
+      connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || '10', 10),
+      queueLimit: 0,
+      enableKeepAlive: true,
+      keepAliveInitialDelay: 0,
+      timezone: '+07:00',
+      dateStrings: true
+    };
+
+const pool = mysql.createPool(poolConfig);
 
 /**
  * Memverifikasi konektivitas ke database MySQL

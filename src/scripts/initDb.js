@@ -8,21 +8,28 @@ dotenv.config();
 async function initDatabase() {
   console.log('[DB Init] Memulai proses inisialisasi database dari database/database.sql...');
 
-  const host = process.env.DB_HOST || '127.0.0.1';
-  const port = parseInt(process.env.DB_PORT || '3306', 10);
-  const user = process.env.DB_USER || 'root';
-  const password = process.env.DB_PASSWORD || '';
-  const database = process.env.DB_NAME || 'barak_db';
+  const host = process.env.MYSQLHOST || process.env.DB_HOST || '127.0.0.1';
+  const port = parseInt(process.env.MYSQLPORT || process.env.DB_PORT || '3306', 10);
+  const user = process.env.MYSQLUSER || process.env.DB_USER || 'root';
+  const password = process.env.MYSQLPASSWORD !== undefined ? process.env.MYSQLPASSWORD : (process.env.DB_PASSWORD || '');
+  const database = process.env.MYSQLDATABASE || process.env.DB_NAME || 'barak_db';
 
   try {
-    // 1. Buat koneksi awal ke MySQL server (tanpa database terpilih)
-    const connection = await mysql.createConnection({
-      host,
-      port,
-      user,
-      password,
-      multipleStatements: true
-    });
+    // 1. Buat koneksi awal ke MySQL server
+    const connConfig = process.env.DATABASE_URL || process.env.MYSQL_URL
+      ? {
+          uri: process.env.DATABASE_URL || process.env.MYSQL_URL,
+          multipleStatements: true
+        }
+      : {
+          host,
+          port,
+          user,
+          password,
+          multipleStatements: true
+        };
+
+    const connection = await mysql.createConnection(connConfig);
 
     console.log(`[DB Init] Terhubung ke MySQL server (${host}:${port})`);
 
