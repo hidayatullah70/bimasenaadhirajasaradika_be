@@ -154,54 +154,41 @@ Dengan konfigurasi ini, frontend akan otomatis beralih dari mode *mock* ke backe
 
 ---
 
-## API Client Collection (Postman & Hoppscotch)
+## API Client Collection (`collection.json`)
 
-Project ini menyediakan file koleksi siap pakai untuk **Hoppscotch** maupun **Postman**:
+Project ini menyediakan file koleksi standar [collection.json](collection.json) yang dapat langsung diimport ke **Hoppscotch** maupun **Postman** untuk menguji seluruh endpoint CRUD:
 
 ### 1. Cara Menggunakan di HOPPSCOTCH:
-
-Hoppscotch mendukung dua cara import yang sangat mudah:
-
-#### Opsi A: Import Native Hoppscotch Collection & Environment (Direkomendasikan)
-1. Buka [Hoppscotch](https://hoppscotch.io) (atau aplikasi desktop Hoppscotch).
-2. **Import Environment**:
-   - Klik tab **Environments** (ikon layer di sidebar kanan/kiri).
-   - Klik **Import** lalu pilih file `hoppscotch-environment.json`.
-   - Pilih environment **Barak Local Development** (`baseUrl: http://localhost:5000`).
-3. **Import Collection**:
-   - Di tab **Collections**, klik tombol menu titik tiga atau ikon **Import / Export**.
-   - Pilih **Import from JSON** -> **Hoppscotch Collection (JSON)**.
-   - Pilih file `hoppscotch-collection.json`.
-4. Seluruh folder CRUD (14 modul) siap digunakan!
-5. **Catatan Koneksi Localhost di Hoppscotch Web**:
-   - Jika menggunakan Hoppscotch via browser (`https://hoppscotch.io`), pastikan memasang ekstensi browser **Hoppscotch Browser Extension** (atau atur *Interceptor* ke *Browser Extension* / *Proxy*) agar browser mengizinkan request ke `http://localhost:5000`.
-
-#### Opsi B: Import Langsung File `collection.json` (Format Postman)
-1. Di tab **Collections** Hoppscotch, klik ikon **Import / Export**.
-2. Pilih **Import from JSON** -> **Postman Collection (JSON)**.
-3. Pilih file `collection.json`.
-
----
+1. Buka [Hoppscotch](https://hoppscotch.io) atau Hoppscotch Desktop.
+2. Di tab **Collections** (ikon folder 📁 di panel kanan), klik ikon **Import / Export**.
+3. Pilih opsi **`Import from Postman`**.
+4. Pilih file `collection.json` dari folder `backend/`.
+5. Seluruh folder CRUD (14 modul endpoint) akan langsung muncul dengan rapi.
+6. **Koneksi ke Localhost di Hoppscotch Web**:
+   - Pasang ekstensi browser **Hoppscotch Browser Extension** di Chrome/Firefox.
+   - Di pojok kanan bawah Hoppscotch, pastikan **Interceptor** diatur ke **Browser Extension** agar browser mengizinkan request ke `http://localhost:5000`.
 
 ### 2. Cara Menggunakan di POSTMAN:
 1. Buka aplikasi **Postman**.
 2. Klik tombol **Import** (di kiri atas).
 3. Pilih file `collection.json` dari folder `backend/`.
-4. Koleksi **"PT. Bhimasena Adhirajasa Radhika - Backend REST API"** akan otomatis muncul dengan seluruh folder CRUD terstruktur:
-   - `00. Server & Health Check`
-   - `01. Authentication` (Dilengkapi auto-save JWT token ke variabel `{{token}}` saat login)
-   - `02. Dashboard Summary`
-   - `03. Employees (CRUD)`
-   - `04. Clients (CRUD)`
-   - `05. Sites / Lokasi Kerja (CRUD)`
-   - `06. Services / Layanan (CRUD)`
-   - `07. Placements / Penempatan (CRUD)`
-   - `08. Attendance / Presensi (CRUD)`
-   - `09. Invoices / Keuangan (CRUD)`
-   - `10. Leads / Marketing (CRUD)`
-   - `11. Activities & Audit Log`
-   - `12. Notifications`
-   - `13. Users & Roles Management (Direktur Only)`
-   - `14. Public Endpoints (Landing Page)`
-5. Jalankan request **Login - Direktur** terlebih dahulu agar token tersimpan otomatis di variabel koleksi, kemudian Anda dapat langsung mengeksekusi endpoint CRUD lainnya tanpa repot menyalin token manual.
+4. Koleksi **"PT. Bhimasena Adhirajasa Radhika - Backend REST API"** akan otomatis muncul.
+5. Jalankan request **01. Authentication -> Login - Direktur** terlebih dahulu. Token JWT akan otomatis tersimpan ke variabel koleksi `{{token}}` untuk request CRUD selanjutnya.
+
+### Struktur Folder Koleksi:
+- `00. Server & Health Check` (Root, Base API v1, Health check)
+- `01. Authentication` (Login semua role, Profile Me, Refresh token, Logout)
+- `02. Dashboard Summary` (Ringkasan metrik KPI dinamis terintegrasi MySQL)
+- `03. Employees (CRUD)` (Manajemen data karyawan & personil)
+- `04. Clients (CRUD)` (Manajemen mitra & klien)
+- `05. Sites / Lokasi Kerja (CRUD)` (Lokasi penempatan tugas)
+- `06. Services / Layanan (CRUD)` (Master katalog layanan outsourcing)
+- `07. Placements / Penempatan (CRUD)` (Penugasan personil ke lokasi klien)
+- `08. Attendance / Presensi (CRUD)` (Presensi harian & rekap)
+- `09. Invoices / Keuangan (CRUD)` (Penerbitan tagihan & status pembayaran)
+- `10. Leads / Marketing (CRUD)` (Pipeline CRM prospek klien)
+- `11. Activities & Audit Log` (Audit trail perubahan sistem)
+- `12. Notifications` (Notifikasi pengguna)
+- `13. Users & Roles Management (Direktur Only)` (Manajemen akun staf)
+- `14. Public Endpoints (Landing Page)` (Layanan publik & formulir kontak)
 
