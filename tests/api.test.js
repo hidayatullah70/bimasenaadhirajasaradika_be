@@ -40,7 +40,16 @@ test('1. GET / - Root Endpoint Info', async () => {
   assert.equal(data.base_url, '/api/v1');
 });
 
-test('2. GET /api/v1/public/services - Public Services List', async () => {
+test('2. GET /api/v1 - Base API v1 Index Info', async () => {
+  const res = await fetch(`${baseUrl}/api/v1`);
+  const data = await res.json();
+
+  assert.equal(res.status, 200);
+  assert.equal(data.success, true);
+  assert.ok(data.endpoints);
+});
+
+test('3. GET /api/v1/public/services - Public Services List', async () => {
   const res = await fetch(`${baseUrl}/api/v1/public/services`);
   const data = await res.json();
 
@@ -49,7 +58,7 @@ test('2. GET /api/v1/public/services - Public Services List', async () => {
   assert.ok(Array.isArray(data.data));
 });
 
-test('3. POST /api/v1/auth/login - Fails on invalid credentials', async () => {
+test('4. POST /api/v1/auth/login - Fails on invalid credentials', async () => {
   const res = await fetch(`${baseUrl}/api/v1/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -61,7 +70,7 @@ test('3. POST /api/v1/auth/login - Fails on invalid credentials', async () => {
   assert.equal(data.success, false);
 });
 
-test('4. POST /api/v1/auth/login - Direktur login succeeds with valid token', async () => {
+test('5. POST /api/v1/auth/login - Direktur login succeeds with valid token', async () => {
   const res = await fetch(`${baseUrl}/api/v1/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -75,7 +84,7 @@ test('4. POST /api/v1/auth/login - Direktur login succeeds with valid token', as
   assert.equal(data.data.user.role, 'direktur');
 });
 
-test('5. RBAC Security: Protected endpoint rejects request without token (401)', async () => {
+test('6. RBAC Security: Protected endpoint rejects request without token (401)', async () => {
   const res = await fetch(`${baseUrl}/api/v1/users`);
   const data = await res.json();
 
@@ -83,7 +92,7 @@ test('5. RBAC Security: Protected endpoint rejects request without token (401)',
   assert.equal(data.success, false);
 });
 
-test('6. RBAC Security: HRD token cannot access Users data (403 Forbidden)', async () => {
+test('7. RBAC Security: HRD token cannot access Users data (403 Forbidden)', async () => {
   const res = await fetch(`${baseUrl}/api/v1/users`, {
     headers: { Authorization: 'Bearer mock-jwt-token-hrd' }
   });
@@ -93,7 +102,7 @@ test('6. RBAC Security: HRD token cannot access Users data (403 Forbidden)', asy
   assert.equal(data.success, false);
 });
 
-test('7. RBAC Security: HRD token cannot create Invoices (403 Forbidden)', async () => {
+test('8. RBAC Security: HRD token cannot create Invoices (403 Forbidden)', async () => {
   const res = await fetch(`${baseUrl}/api/v1/invoices`, {
     method: 'POST',
     headers: {
@@ -108,7 +117,7 @@ test('7. RBAC Security: HRD token cannot create Invoices (403 Forbidden)', async
   assert.equal(data.success, false);
 });
 
-test('8. RBAC Security: HRD token can access Employees list (200 OK)', async () => {
+test('9. RBAC Security: HRD token can access Employees list (200 OK)', async () => {
   const res = await fetch(`${baseUrl}/api/v1/employees`, {
     headers: { Authorization: 'Bearer mock-jwt-token-hrd' }
   });
@@ -119,7 +128,7 @@ test('8. RBAC Security: HRD token can access Employees list (200 OK)', async () 
   assert.ok(Array.isArray(data.data));
 });
 
-test('9. RBAC Security: Finance token cannot access Users data (403 Forbidden)', async () => {
+test('10. RBAC Security: Finance token cannot access Users data (403 Forbidden)', async () => {
   const res = await fetch(`${baseUrl}/api/v1/users`, {
     headers: { Authorization: 'Bearer mock-jwt-token-finance' }
   });
@@ -129,7 +138,7 @@ test('9. RBAC Security: Finance token cannot access Users data (403 Forbidden)',
   assert.equal(data.success, false);
 });
 
-test('10. RBAC Security: Finance token cannot delete Employees (403 Forbidden)', async () => {
+test('11. RBAC Security: Finance token cannot delete Employees (403 Forbidden)', async () => {
   const res = await fetch(`${baseUrl}/api/v1/employees/1`, {
     method: 'DELETE',
     headers: { Authorization: 'Bearer mock-jwt-token-finance' }
@@ -140,7 +149,7 @@ test('10. RBAC Security: Finance token cannot delete Employees (403 Forbidden)',
   assert.equal(data.success, false);
 });
 
-test('11. RBAC Security: Finance token can access Invoices list (200 OK)', async () => {
+test('12. RBAC Security: Finance token can access Invoices list (200 OK)', async () => {
   const res = await fetch(`${baseUrl}/api/v1/invoices`, {
     headers: { Authorization: 'Bearer mock-jwt-token-finance' }
   });
@@ -151,7 +160,7 @@ test('11. RBAC Security: Finance token can access Invoices list (200 OK)', async
   assert.ok(Array.isArray(data.data));
 });
 
-test('12. Direktur Dashboard Summary (200 OK)', async () => {
+test('13. Direktur Dashboard Summary (200 OK)', async () => {
   const res = await fetch(`${baseUrl}/api/v1/dashboard/summary`, {
     headers: { Authorization: 'Bearer mock-jwt-token-direktur' }
   });
@@ -163,7 +172,7 @@ test('12. Direktur Dashboard Summary (200 OK)', async () => {
   assert.ok(Array.isArray(data.data.servicesSummary));
 });
 
-test('13. 404 Route Not Found handling', async () => {
+test('14. 404 Route Not Found handling', async () => {
   const res = await fetch(`${baseUrl}/api/v1/non-existent-route`);
   const data = await res.json();
 
