@@ -1,0 +1,1700 @@
+[
+  {
+    "v": 2,
+    "name": "PT. Bhimasena Adhirajasa Radhika - Backend REST API",
+    "folders": [
+      {
+        "v": 1,
+        "name": "00. Server & Health Check",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Root Server Info",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "API v1 Directory Index",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Health Check",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/health",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "01. Authentication",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Login - Direktur (Auto-save Token)",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/auth/login",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "var jsonData = pm.response.json();\nif (jsonData.data && jsonData.data.token) {\n    pm.collectionVariables.set('token', jsonData.data.token);\n    console.log('Token saved to collection variable:', jsonData.data.token);\n}",
+            "auth": {
+              "authType": "none",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"email\": \"direktur@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Login - HRD",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/auth/login",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "var jsonData = pm.response.json();\nif (jsonData.data && jsonData.data.token) {\n    pm.collectionVariables.set('token', jsonData.data.token);\n}",
+            "auth": {
+              "authType": "none",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"email\": \"hrd@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Login - Finance",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/auth/login",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "var jsonData = pm.response.json();\nif (jsonData.data && jsonData.data.token) {\n    pm.collectionVariables.set('token', jsonData.data.token);\n}",
+            "auth": {
+              "authType": "none",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"email\": \"finance@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Login - Marketing",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/auth/login",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "var jsonData = pm.response.json();\nif (jsonData.data && jsonData.data.token) {\n    pm.collectionVariables.set('token', jsonData.data.token);\n}",
+            "auth": {
+              "authType": "none",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"email\": \"marketing@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Login - Operasional",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/auth/login",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "var jsonData = pm.response.json();\nif (jsonData.data && jsonData.data.token) {\n    pm.collectionVariables.set('token', jsonData.data.token);\n}",
+            "auth": {
+              "authType": "none",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"email\": \"operasional@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Profile (Me)",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/auth/me",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Refresh Token",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/auth/refresh",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Logout",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/auth/logout",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "02. Dashboard Summary",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get Dashboard KPI Summary",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/dashboard/summary?role=direktur",
+            "params": [
+              {
+                "key": "role",
+                "value": "direktur",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "03. Employees (CRUD)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get All Employees (Filter & Pagination)",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/employees?page=1&limit=10&status=active&search=",
+            "params": [
+              {
+                "key": "page",
+                "value": "1",
+                "active": true
+              },
+              {
+                "key": "limit",
+                "value": "10",
+                "active": true
+              },
+              {
+                "key": "status",
+                "value": "active",
+                "active": true
+              },
+              {
+                "key": "search",
+                "value": "",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Employee by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/employees/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Create Employee",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/employees",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"nik\": \"EMP-2026-0099\",\n  \"name\": \"Budi Santoso\",\n  \"email\": \"budi.santoso@example.com\",\n  \"phone\": \"081234567899\",\n  \"position\": \"Security Guard\",\n  \"division\": \"Operasional\",\n  \"join_date\": \"2026-01-15\",\n  \"status\": \"active\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Update Employee (PATCH)",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/employees/1",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"position\": \"Senior Security Guard\",\n  \"phone\": \"081299998888\",\n  \"status\": \"active\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Delete Employee",
+            "method": "DELETE",
+            "endpoint": "<<baseUrl>>/api/v1/employees/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "04. Clients (CRUD)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get All Clients",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/clients?page=1&limit=10&status=active&search=",
+            "params": [
+              {
+                "key": "page",
+                "value": "1",
+                "active": true
+              },
+              {
+                "key": "limit",
+                "value": "10",
+                "active": true
+              },
+              {
+                "key": "status",
+                "value": "active",
+                "active": true
+              },
+              {
+                "key": "search",
+                "value": "",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Client by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/clients/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Create Client",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/clients",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"name\": \"PT. Nusantara Graha Pratama\",\n  \"company\": \"Nusantara Group\",\n  \"email\": \"procurement@nusantaragraha.com\",\n  \"phone\": \"021-5551234\",\n  \"address\": \"Gedung Nusantara Tower Lt. 15, Sudirman, Jakarta\",\n  \"industry\": \"Real Estate\",\n  \"contract_start\": \"2026-03-01\",\n  \"contract_end\": \"2027-02-28\",\n  \"status\": \"active\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Update Client (PATCH)",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/clients/1",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"phone\": \"021-5554321\",\n  \"status\": \"active\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Delete Client",
+            "method": "DELETE",
+            "endpoint": "<<baseUrl>>/api/v1/clients/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "05. Sites / Lokasi Kerja (CRUD)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get All Sites",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/sites?client_id=&status=active",
+            "params": [
+              {
+                "key": "client_id",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "status",
+                "value": "active",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Site by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/sites/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Create Site",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/sites",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"client_id\": 1,\n  \"name\": \"Gedung Cyber 2 Lantai GF - 10\",\n  \"address\": \"Jl. H.R. Rasuna Said Blok X-5, Kuningan\",\n  \"city\": \"Jakarta Selatan\",\n  \"required_personnel\": 8,\n  \"status\": \"active\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Update Site (PATCH)",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/sites/1",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"required_personnel\": 10,\n  \"status\": \"active\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Delete Site",
+            "method": "DELETE",
+            "endpoint": "<<baseUrl>>/api/v1/sites/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "06. Services / Layanan (CRUD)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get All Services",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/services",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Service by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/services/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Create Service",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/services",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"code\": \"VALET\",\n  \"name\": \"Valet & Parking Management\",\n  \"description\": \"Layanan operasional valet parking terpercaya dengan SOP profesional.\",\n  \"is_active\": true\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Update Service (PATCH)",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/services/1",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"description\": \"Deskripsi layanan valet terbaru.\",\n  \"is_active\": true\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Delete Service",
+            "method": "DELETE",
+            "endpoint": "<<baseUrl>>/api/v1/services/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "07. Placements / Penempatan (CRUD)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get All Placements",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/placements?client_id=&site_id=&status=active",
+            "params": [
+              {
+                "key": "client_id",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "site_id",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "status",
+                "value": "active",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Placement by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/placements/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Create Placement",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/placements",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"employee_id\": 1,\n  \"client_id\": 1,\n  \"site_id\": 1,\n  \"service_id\": 1,\n  \"shift\": \"pagi\",\n  \"start_date\": \"2026-03-01\",\n  \"end_date\": \"2027-02-28\",\n  \"status\": \"active\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Update Placement (PATCH)",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/placements/1",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"shift\": \"malam\",\n  \"status\": \"active\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Delete Placement",
+            "method": "DELETE",
+            "endpoint": "<<baseUrl>>/api/v1/placements/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "08. Attendance / Presensi (CRUD)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get Attendance Logs",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/attendance?date=&status=&site_id=&employee_id=",
+            "params": [
+              {
+                "key": "date",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "status",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "site_id",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "employee_id",
+                "value": "",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Today Attendance Summary",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/attendance/today",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Attendance by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/attendance/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Record Attendance (Clock In)",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/attendance",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"employee_id\": 1,\n  \"site_id\": 1,\n  \"attendance_date\": \"2026-09-17\",\n  \"clock_in\": \"07:55:00\",\n  \"status\": \"present\",\n  \"notes\": \"Tepat waktu\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Update Attendance (Clock Out / Status)",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/attendance/1",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"clock_out\": \"17:05:00\",\n  \"notes\": \"Selesai shift normal\"\n}"
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "09. Invoices / Keuangan (CRUD)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get All Invoices",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/invoices?page=1&limit=10&status=&client_id=",
+            "params": [
+              {
+                "key": "page",
+                "value": "1",
+                "active": true
+              },
+              {
+                "key": "limit",
+                "value": "10",
+                "active": true
+              },
+              {
+                "key": "status",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "client_id",
+                "value": "",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Invoice by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/invoices/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Create Invoice",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/invoices",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"client_id\": 1,\n  \"invoice_no\": \"INV-2026-09-009\",\n  \"invoice_date\": \"2026-09-17\",\n  \"due_date\": \"2026-10-17\",\n  \"subtotal\": 45000000,\n  \"tax\": 4950000,\n  \"total\": 49950000,\n  \"status\": \"issued\",\n  \"notes\": \"Tagihan layanan outsourcing September 2026\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Update Invoice Status (PATCH)",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/invoices/1",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"status\": \"paid\",\n  \"notes\": \"Lunas ditransfer via Mandiri\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Delete Invoice",
+            "method": "DELETE",
+            "endpoint": "<<baseUrl>>/api/v1/invoices/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "10. Leads / Marketing (CRUD)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get All Leads",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/leads?page=1&limit=10&status=&search=",
+            "params": [
+              {
+                "key": "page",
+                "value": "1",
+                "active": true
+              },
+              {
+                "key": "limit",
+                "value": "10",
+                "active": true
+              },
+              {
+                "key": "status",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "search",
+                "value": "",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Lead by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/leads/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Create Lead",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/leads",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"company_name\": \"PT. Mega Sentosa Industri\",\n  \"contact_name\": \"Hendra Kusuma\",\n  \"email\": \"hendra@megasentosa.com\",\n  \"phone\": \"081399887766\",\n  \"estimated_value\": 120000000,\n  \"status\": \"new\",\n  \"source\": \"Website Landing Page\",\n  \"notes\": \"Membutuhkan 15 personil security dan 5 cleaning service\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Update Lead (PATCH)",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/leads/1",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"status\": \"proposal_sent\",\n  \"estimated_value\": 125000000,\n  \"notes\": \"Proposal penawaran resmi telah dikirim ke manajemen klien\"\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Delete Lead",
+            "method": "DELETE",
+            "endpoint": "<<baseUrl>>/api/v1/leads/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "11. Activities & Audit Log",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get Audit Log Activities",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/activities?page=1&limit=20&user_id=&action=",
+            "params": [
+              {
+                "key": "page",
+                "value": "1",
+                "active": true
+              },
+              {
+                "key": "limit",
+                "value": "20",
+                "active": true
+              },
+              {
+                "key": "user_id",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "action",
+                "value": "",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get Activity by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/activities/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "12. Notifications",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get Notifications",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/notifications?is_read=&limit=20",
+            "params": [
+              {
+                "key": "is_read",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "limit",
+                "value": "20",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Mark Single Notification as Read",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/notifications/1/read",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Mark All Notifications as Read",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/notifications/mark-all-read",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "13. Users & Roles Management (Direktur Only)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get All Users",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/users?page=1&limit=10&role_id=&search=",
+            "params": [
+              {
+                "key": "page",
+                "value": "1",
+                "active": true
+              },
+              {
+                "key": "limit",
+                "value": "10",
+                "active": true
+              },
+              {
+                "key": "role_id",
+                "value": "",
+                "active": true
+              },
+              {
+                "key": "search",
+                "value": "",
+                "active": true
+              }
+            ],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get All Master Roles",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/users/roles",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Get User by ID",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/users/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Create User",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/users",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"name\": \"Staf HRD Baru\",\n  \"email\": \"hrd.staff2@bhimasena.co.id\",\n  \"password\": \"password123\",\n  \"role_id\": 2,\n  \"is_active\": true\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Update User (PATCH)",
+            "method": "PATCH",
+            "endpoint": "<<baseUrl>>/api/v1/users/1",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"name\": \"Staf HRD Terupdate\",\n  \"is_active\": true\n}"
+            }
+          },
+          {
+            "v": 1,
+            "name": "Delete User",
+            "method": "DELETE",
+            "endpoint": "<<baseUrl>>/api/v1/users/1",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "inherit",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      },
+      {
+        "v": 1,
+        "name": "14. Public Endpoints (Landing Page)",
+        "folders": [],
+        "requests": [
+          {
+            "v": 1,
+            "name": "Get Public Services List",
+            "method": "GET",
+            "endpoint": "<<baseUrl>>/api/v1/public/services",
+            "params": [],
+            "headers": [],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "none",
+              "authActive": true
+            },
+            "body": {
+              "contentType": null,
+              "body": null
+            }
+          },
+          {
+            "v": 1,
+            "name": "Submit Public Lead Form",
+            "method": "POST",
+            "endpoint": "<<baseUrl>>/api/v1/public/lead",
+            "params": [],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "active": true
+              }
+            ],
+            "preRequestScript": "",
+            "testScript": "",
+            "auth": {
+              "authType": "none",
+              "authActive": true
+            },
+            "body": {
+              "contentType": "application/json",
+              "body": "{\n  \"company_name\": \"PT. Mitra Sejahtera Bersama\",\n  \"contact_name\": \"Ibu Ratna Dewi\",\n  \"email\": \"ratna@mitrasejahtera.co.id\",\n  \"phone\": \"081122334455\",\n  \"service_interest\": \"Security & Guard Services\",\n  \"message\": \"Mohon informasi penawaran pengadaan personil keamanan dan cleaning service untuk gedung baru kami di Cilandak.\"\n}"
+            }
+          }
+        ],
+        "auth": {
+          "authType": "inherit",
+          "authActive": true
+        },
+        "headers": []
+      }
+    ],
+    "requests": [],
+    "auth": {
+      "authType": "bearer",
+      "authActive": true,
+      "token": "<<token>>"
+    },
+    "headers": []
+  }
+]

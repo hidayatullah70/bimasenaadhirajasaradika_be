@@ -154,11 +154,36 @@ Dengan konfigurasi ini, frontend akan otomatis beralih dari mode *mock* ke backe
 
 ---
 
-## Postman Collection (`collection.json`)
+## API Client Collection (Postman & Hoppscotch)
 
-File [collection.json](collection.json) telah disediakan di root direktori backend untuk mempermudah pengujian seluruh endpoint CRUD API via **Postman**:
+Project ini menyediakan file koleksi siap pakai untuk **Hoppscotch** maupun **Postman**:
 
-### Cara Import ke Postman:
+### 1. Cara Menggunakan di HOPPSCOTCH:
+
+Hoppscotch mendukung dua cara import yang sangat mudah:
+
+#### Opsi A: Import Native Hoppscotch Collection & Environment (Direkomendasikan)
+1. Buka [Hoppscotch](https://hoppscotch.io) (atau aplikasi desktop Hoppscotch).
+2. **Import Environment**:
+   - Klik tab **Environments** (ikon layer di sidebar kanan/kiri).
+   - Klik **Import** lalu pilih file `hoppscotch-environment.json`.
+   - Pilih environment **Barak Local Development** (`baseUrl: http://localhost:5000`).
+3. **Import Collection**:
+   - Di tab **Collections**, klik tombol menu titik tiga atau ikon **Import / Export**.
+   - Pilih **Import from JSON** -> **Hoppscotch Collection (JSON)**.
+   - Pilih file `hoppscotch-collection.json`.
+4. Seluruh folder CRUD (14 modul) siap digunakan!
+5. **Catatan Koneksi Localhost di Hoppscotch Web**:
+   - Jika menggunakan Hoppscotch via browser (`https://hoppscotch.io`), pastikan memasang ekstensi browser **Hoppscotch Browser Extension** (atau atur *Interceptor* ke *Browser Extension* / *Proxy*) agar browser mengizinkan request ke `http://localhost:5000`.
+
+#### Opsi B: Import Langsung File `collection.json` (Format Postman)
+1. Di tab **Collections** Hoppscotch, klik ikon **Import / Export**.
+2. Pilih **Import from JSON** -> **Postman Collection (JSON)**.
+3. Pilih file `collection.json`.
+
+---
+
+### 2. Cara Menggunakan di POSTMAN:
 1. Buka aplikasi **Postman**.
 2. Klik tombol **Import** (di kiri atas).
 3. Pilih file `collection.json` dari folder `backend/`.
