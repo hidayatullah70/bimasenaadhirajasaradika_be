@@ -318,11 +318,11 @@ ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `description` = VALUES(`descrip
 -- Bcrypt Hash: $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
 -- ------------------------------------------------------------------------------
 INSERT INTO `users` (`id`, `role_id`, `name`, `email`, `password_hash`, `is_active`) VALUES
-(1, 1, 'Hidayat (Direktur)', 'direktur@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-(2, 2, 'Siti Rahma (HRD)', 'hrd@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-(3, 3, 'Budi Santoso (Finance)', 'finance@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-(4, 4, 'Dewi Lestari (Marketing)', 'marketing@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-(5, 5, 'Agus Prasetyo (Operasional)', 'operasional@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE)
+(1, 1, 'Juli Priyanto (Direktur)', 'direktur@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
+(2, 2, 'Robyn Topani (HRD)', 'hrd@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
+(3, 3, 'Zaenal Arifin (Finance)', 'finance@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
+(4, 4, 'Hendri Nopamin (Marketing)', 'marketing@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
+(5, 5, 'Nazi Rinaldi (operasional)', 'operasional@bhimasena.co.id', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE)
 ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `role_id` = VALUES(`role_id`);
 
 -- ------------------------------------------------------------------------------
