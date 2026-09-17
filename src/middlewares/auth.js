@@ -25,7 +25,9 @@ async function authenticate(req, res, next) {
       const mockRole = token.replace('mock-jwt-token-', '');
       const targetRoleCode = (mockRole === 'owner' || mockRole === 'direktur') ? 'direktur' : mockRole;
       const [mockUserRows] = await pool.execute(
-        `SELECT u.id, u.name, u.email, u.is_active, u.role_id, r.code AS role_code, r.name AS role_name
+        `SELECT u.id, u.name, u.email, u.avatar_url,
+                COALESCE(u.avatar_url, CONCAT('https://ui-avatars.com/api/?name=', REPLACE(u.name, ' ', '+'), '&background=0284c7&color=fff&size=128')) AS avatar,
+                u.is_active, u.role_id, r.code AS role_code, r.name AS role_name
          FROM users u
          JOIN roles r ON u.role_id = r.id
          WHERE r.code = ? AND u.is_active = TRUE
@@ -37,6 +39,8 @@ async function authenticate(req, res, next) {
           id: mockUserRows[0].id,
           name: mockUserRows[0].name,
           email: mockUserRows[0].email,
+          avatar: mockUserRows[0].avatar,
+          avatar_url: mockUserRows[0].avatar_url,
           roleId: mockUserRows[0].role_id,
           role: mockUserRows[0].role_code,
           roleName: mockUserRows[0].role_name
@@ -50,7 +54,9 @@ async function authenticate(req, res, next) {
 
     // Ambil data user terkini dari database
     const [rows] = await pool.execute(
-      `SELECT u.id, u.name, u.email, u.is_active, u.role_id, r.code AS role_code, r.name AS role_name
+      `SELECT u.id, u.name, u.email, u.avatar_url,
+              COALESCE(u.avatar_url, CONCAT('https://ui-avatars.com/api/?name=', REPLACE(u.name, ' ', '+'), '&background=0284c7&color=fff&size=128')) AS avatar,
+              u.is_active, u.role_id, r.code AS role_code, r.name AS role_name
        FROM users u
        JOIN roles r ON u.role_id = r.id
        WHERE u.id = ? LIMIT 1`,
@@ -65,14 +71,15 @@ async function authenticate(req, res, next) {
 
     // BR-USER-002: Hanya user dengan is_active = true yang dapat mengakses sistem
     if (!user.is_active) {
-      return errorResponse(res, 'Akun Anda telah dinonaktifkan. Hubungi administrator.', null, 403);
+      return errorResponse(res, 'Akun dinonaktifkan. Silakan hubungi administrator.', null, 403);
     }
 
-    // Pasang data user ke request
     req.user = {
       id: user.id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
+      avatar_url: user.avatar_url,
       roleId: user.role_id,
       role: user.role_code,
       roleName: user.role_name

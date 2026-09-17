@@ -46,7 +46,9 @@ async function getUsers(req, res, next) {
 
     // Data query (tidak mengekspos password_hash)
     const [rows] = await pool.query(
-      `SELECT u.id, u.name, u.email, u.is_active, u.last_login_at, u.created_at, u.updated_at,
+      `SELECT u.id, u.name, u.email, u.avatar_url,
+              COALESCE(u.avatar_url, CONCAT('https://ui-avatars.com/api/?name=', REPLACE(u.name, ' ', '+'), '&background=0284c7&color=fff&size=128')) AS avatar,
+              u.is_active, u.last_login_at, u.created_at, u.updated_at,
               u.role_id, r.code AS role_code, r.name AS role_name
        FROM users u
        JOIN roles r ON u.role_id = r.id
@@ -69,7 +71,9 @@ async function getUserById(req, res, next) {
   try {
     const { id } = req.params;
     const [rows] = await pool.execute(
-      `SELECT u.id, u.name, u.email, u.is_active, u.last_login_at, u.created_at, u.updated_at,
+      `SELECT u.id, u.name, u.email, u.avatar_url,
+              COALESCE(u.avatar_url, CONCAT('https://ui-avatars.com/api/?name=', REPLACE(u.name, ' ', '+'), '&background=0284c7&color=fff&size=128')) AS avatar,
+              u.is_active, u.last_login_at, u.created_at, u.updated_at,
               u.role_id, r.code AS role_code, r.name AS role_name
        FROM users u
        JOIN roles r ON u.role_id = r.id
@@ -92,7 +96,7 @@ async function getUserById(req, res, next) {
  */
 async function createUser(req, res, next) {
   try {
-    const { name, email, password, role_id, is_active } = req.body;
+    const { name, email, password, role_id, is_active, avatar_url, avatar } = req.body;
 
     if (!name || !email || !password || !role_id) {
       return errorResponse(res, 'Nama, email, password, dan role_id wajib diisi.', null, 400);
@@ -106,11 +110,12 @@ async function createUser(req, res, next) {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
     const activeStatus = is_active !== undefined ? (is_active ? 1 : 0) : 1;
+    const targetAvatar = (avatar_url || avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name.trim())}&background=0284c7&color=fff&size=128`).trim();
 
     const [result] = await pool.execute(
-      `INSERT INTO users (name, email, password_hash, role_id, is_active, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, NOW(), NOW())`,
-      [name.trim(), email.trim().toLowerCase(), passwordHash, role_id, activeStatus]
+      `INSERT INTO users (name, email, avatar_url, password_hash, role_id, is_active, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+      [name.trim(), email.trim().toLowerCase(), targetAvatar, passwordHash, role_id, activeStatus]
     );
 
     const newId = result.insertId;
@@ -120,10 +125,10 @@ async function createUser(req, res, next) {
       action: 'CREATE',
       resource: 'users',
       resourceId: newId,
-      afterData: { name, email, role_id, is_active: activeStatus }
+      afterData: { name, email, role_id, avatar_url: targetAvatar, is_active: activeStatus }
     });
 
-    return successResponse(res, { id: newId, name, email, role_id }, 'Pengguna berhasil dibuat.', null, 201);
+    return successResponse(res, { id: newId, name, email, role_id, avatar_url: targetAvatar, avatar: targetAvatar }, 'Pengguna berhasil dibuat.', null, 201);
   } catch (err) {
     next(err);
   }
@@ -136,7 +141,7 @@ async function createUser(req, res, next) {
 async function updateUser(req, res, next) {
   try {
     const { id } = req.params;
-    const { name, email, password, role, role_id, is_active } = req.body;
+    const { name, email, password, role, role_id, is_active, avatar_url, avatar } = req.body;
 
     const [existing] = await pool.execute('SELECT * FROM users WHERE id = ? LIMIT 1', [id]);
     if (existing.length === 0) {
@@ -162,6 +167,12 @@ async function updateUser(req, res, next) {
         updates.push('email = ?');
         params.push(trimmedEmail);
       }
+    }
+
+    if (avatar_url || avatar) {
+      const newAvatar = (avatar_url || avatar).trim();
+      updates.push('avatar_url = ?');
+      params.push(newAvatar);
     }
 
     if (password) {
@@ -197,7 +208,9 @@ async function updateUser(req, res, next) {
     await pool.execute(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, params);
 
     const [updatedUser] = await pool.execute(
-      `SELECT u.id, u.name, u.email, u.is_active, u.role_id, r.code AS role_code, r.name AS role_name
+      `SELECT u.id, u.name, u.email, u.avatar_url,
+              COALESCE(u.avatar_url, CONCAT('https://ui-avatars.com/api/?name=', REPLACE(u.name, ' ', '+'), '&background=0284c7&color=fff&size=128')) AS avatar,
+              u.is_active, u.role_id, r.code AS role_code, r.name AS role_name
        FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?`,
       [id]
     );

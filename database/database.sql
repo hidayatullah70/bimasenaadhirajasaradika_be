@@ -56,6 +56,7 @@ CREATE TABLE `users` (
     `role_id` BIGINT UNSIGNED NOT NULL,
     `name` VARCHAR(150) NOT NULL,
     `email` VARCHAR(150) NOT NULL,
+    `avatar_url` VARCHAR(500) NULL DEFAULT NULL,
     `password_hash` VARCHAR(255) NOT NULL,
     `is_active` BOOLEAN NOT NULL DEFAULT TRUE,
     `last_login_at` TIMESTAMP NULL DEFAULT NULL,

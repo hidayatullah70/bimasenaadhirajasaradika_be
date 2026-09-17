@@ -1079,7 +1079,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Staf HRD Baru\",\n  \"email\": \"hrd.staff2@bhimasena.co.id\",\n  \"password\": \"password123\",\n  \"role_id\": 2,\n  \"is_active\": true\n}"
+              "raw": "{\n  \"name\": \"Ahmad Fauzi\",\n  \"email\": \"ahmad.fauzi@bhimasena.co.id\",\n  \"password\": \"password123\",\n  \"role_id\": 2,\n  \"avatar_url\": \"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\",\n  \"is_active\": true\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/users",
@@ -1095,7 +1095,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Staf HRD Terupdate\",\n  \"is_active\": true\n}"
+              "raw": "{\n  \"name\": \"Ahmad Fauzi, S.Psi\",\n  \"avatar_url\": \"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150\",\n  \"is_active\": true\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/users/1",
