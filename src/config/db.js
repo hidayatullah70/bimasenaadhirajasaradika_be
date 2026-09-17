@@ -18,7 +18,8 @@ const poolConfig = process.env.DATABASE_URL || process.env.MYSQL_URL
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
       timezone: '+07:00',
-      dateStrings: true
+      dateStrings: true,
+      multipleStatements: true
     }
   : {
       host,
@@ -32,7 +33,8 @@ const poolConfig = process.env.DATABASE_URL || process.env.MYSQL_URL
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
       timezone: '+07:00',
-      dateStrings: true
+      dateStrings: true,
+      multipleStatements: true
     };
 
 const pool = mysql.createPool(poolConfig);
@@ -43,17 +45,50 @@ const pool = mysql.createPool(poolConfig);
 async function testConnection() {
   try {
     const connection = await pool.getConnection();
-    console.log(`[Database] Terkoneksi ke MySQL database: ${process.env.DB_NAME || 'barak_db'} (${process.env.DB_HOST}:${process.env.DB_PORT || 3306})`);
+    const currentDb = process.env.MYSQLDATABASE || process.env.DB_NAME || 'barak_db';
+    console.log(`[Database] Terkoneksi ke MySQL: ${currentDb} (${host}:${port})`);
     connection.release();
     return true;
   } catch (err) {
     console.warn(`[Database Warning] Tidak dapat tersambung ke MySQL (${err.code || err.message}).`);
-    console.warn('[Database Warning] Pastikan Laragon/MySQL service sudah dijalankan.');
+    return false;
+  }
+}
+
+/**
+ * Otomatis menginisialisasi skema & seed data jika database masih kosong (misal saat baru deploy di Railway)
+ */
+async function autoInitDatabaseIfEmpty() {
+  try {
+    const [tables] = await pool.query('SHOW TABLES');
+    if (tables.length === 0) {
+      console.log('[Auto-Init] Database kosong terdeteksi (0 tabel). Menginisialisasi skema & seed data otomatis...');
+      const fs = require('fs');
+      const path = require('path');
+      const sqlPath = path.join(__dirname, '../../database/database.sql');
+      if (fs.existsSync(sqlPath)) {
+        let sqlContent = fs.readFileSync(sqlPath, 'utf8');
+        // Bersihkan USE barak_db dan CREATE DATABASE agar tabel masuk ke database aktif (misal: railway)
+        sqlContent = sqlContent
+          .replace(/CREATE DATABASE IF NOT EXISTS `barak_db`[\s\S]*?USE `barak_db`;/g, '')
+          .replace(/CREATE DATABASE IF NOT EXISTS `barak_db`;/g, '')
+          .replace(/USE `barak_db`;/g, '');
+
+        const connection = await pool.getConnection();
+        await connection.query(sqlContent);
+        connection.release();
+        console.log('[Auto-Init] SUKSES! 12 tabel InnoDB dan data awal berhasil dibuat secara otomatis.');
+      }
+    }
+    return true;
+  } catch (err) {
+    console.warn(`[Auto-Init Notice] ${err.message}`);
     return false;
   }
 }
 
 module.exports = {
   pool,
-  testConnection
+  testConnection,
+  autoInitDatabaseIfEmpty
 };

@@ -2,13 +2,14 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = require('./app');
-const { testConnection } = require('./config/db');
+const { testConnection, autoInitDatabaseIfEmpty } = require('./config/db');
 
 const PORT = process.env.PORT || 5000;
 
 async function startServer() {
-  // Verifikasi koneksi MySQL
+  // Verifikasi koneksi MySQL & Inisialisasi otomatis jika DB masih kosong
   await testConnection();
+  await autoInitDatabaseIfEmpty();
 
   const server = app.listen(PORT, () => {
     console.log('================================================================');
