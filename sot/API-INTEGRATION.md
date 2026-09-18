@@ -7,7 +7,7 @@ Dokumen ini merupakan panduan integrasi resmi seluruh endpoint REST API PT. Bhim
 
 ## 1. Konsep Dasar & Format Respons Standar
 
-- **Base API URL**: `http://localhost:5000/api/v1`
+- **Base API URL**: `https://bimasenaadhirajasaradikabe-production.up.railway.app/api/v1`
 - **Header Standar**:
   ```http
   Content-Type: application/json

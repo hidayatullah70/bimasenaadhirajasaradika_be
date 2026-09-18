@@ -8,7 +8,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:5000",
+      "value": "https://bimasenaadhirajasaradikabe-production.up.railway.app",
       "type": "string"
     },
     {
