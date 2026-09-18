@@ -255,28 +255,68 @@ async function updateUser(req, res, next) {
 
 /**
  * DELETE /api/v1/users/:id
- * SOT Reference: BR-USER-004 (Deactivation over hard delete)
+ * Supports:
+ * 1. ?permanent=true / ?hard=true -> Hard Delete (Hapus Permanen dari Database)
+ * 2. Default -> Soft Deactivation (Nonaktifkan Akses)
  */
 async function deleteUser(req, res, next) {
   try {
     const { id } = req.params;
+    const { permanent, hard, action } = req.query;
 
-    // BR-USER-004: Soft deactivation
-    const [result] = await pool.execute('UPDATE users SET is_active = FALSE, updated_at = NOW() WHERE id = ?', [id]);
+    if (parseInt(id, 10) === 1) {
+      return errorResponse(res, 'Akun Direktur Utama tidak dapat dihapus atau dinonaktifkan.', null, 403);
+    }
 
-    if (result.affectedRows === 0) {
+    const [existing] = await pool.execute('SELECT id, name, email, is_active FROM users WHERE id = ? LIMIT 1', [id]);
+    if (existing.length === 0) {
       return errorResponse(res, 'Pengguna tidak ditemukan.', null, 404);
     }
 
+    const user = existing[0];
+
+    // 1. HARD DELETE PERMANENT
+    if (permanent === 'true' || hard === 'true' || action === 'permanent') {
+      // Unlink safely from foreign key tables
+      await pool.execute('UPDATE placements SET created_by = NULL WHERE created_by = ?', [id]).catch(() => {});
+      await pool.execute('UPDATE invoices SET created_by = NULL WHERE created_by = ?', [id]).catch(() => {});
+      await pool.execute('UPDATE attendances SET recorded_by = NULL WHERE recorded_by = ?', [id]).catch(() => {});
+      await pool.execute('UPDATE activity_logs SET user_id = NULL WHERE user_id = ?', [id]).catch(() => {});
+      await pool.execute('DELETE FROM notifications WHERE user_id = ?', [id]).catch(() => {});
+
+      const [result] = await pool.execute('DELETE FROM users WHERE id = ?', [id]);
+
+      await logActivity({
+        userId: req.user.id,
+        action: 'DELETE',
+        resource: 'users',
+        resourceId: id,
+        beforeData: { name: user.name, email: user.email },
+        afterData: { deleted: true }
+      });
+
+      return successResponse(res, { id, name: user.name, deleted: true }, `Pengguna ${user.name} berhasil dihapus permanen dari sistem.`);
+    }
+
+    // 2. TOGGLE / SOFT DEACTIVATE (or ACTIVATE)
+    const newStatus = action === 'activate' ? 1 : 0;
+    const actionText = newStatus === 1 ? 'diaktifkan kembali' : 'dinonaktifkan';
+
+    await pool.execute('UPDATE users SET is_active = ?, updated_at = NOW() WHERE id = ?', [newStatus, id]);
+
     await logActivity({
       userId: req.user.id,
-      action: 'DEACTIVATE',
+      action: newStatus === 1 ? 'ACTIVATE' : 'DEACTIVATE',
       resource: 'users',
       resourceId: id,
-      afterData: { is_active: false }
+      afterData: { is_active: newStatus === 1 }
     });
 
-    return successResponse(res, { id, is_active: false }, 'Pengguna berhasil dinonaktifkan (soft deactivation).');
+    return successResponse(
+      res,
+      { id, name: user.name, is_active: newStatus === 1 },
+      `Pengguna ${user.name} berhasil ${actionText}.`
+    );
   } catch (err) {
     next(err);
   }
