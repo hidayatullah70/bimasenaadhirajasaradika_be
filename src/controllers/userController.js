@@ -110,7 +110,29 @@ async function createUser(req, res, next) {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
     const activeStatus = is_active !== undefined ? (is_active ? 1 : 0) : 1;
-    const targetAvatar = (avatar_url || avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name.trim())}&background=0284c7&color=fff&size=128`).trim();
+    
+    // Prioritas: avatar_url input -> mapping nama tim -> default /assets/img/team/JustHidy3.png
+    let targetAvatar = (avatar_url || avatar || '').trim();
+    if (!targetAvatar) {
+      const lowerName = name.trim().toLowerCase();
+      if (lowerName.includes('hidayat')) {
+        targetAvatar = '/assets/img/team/JustHidy3.png';
+      } else if (lowerName.includes('gheril')) {
+        targetAvatar = '/assets/img/team/person-5.jpeg';
+      } else if (lowerName.includes('juli')) {
+        targetAvatar = '/assets/img/team/person-3.jpeg';
+      } else if (lowerName.includes('robyn')) {
+        targetAvatar = '/assets/img/team/person-7.jpeg';
+      } else if (lowerName.includes('zaenal')) {
+        targetAvatar = '/assets/img/team/person-4.jpeg';
+      } else if (lowerName.includes('hendri')) {
+        targetAvatar = '/assets/img/team/person-2.jpeg';
+      } else if (lowerName.includes('nazi')) {
+        targetAvatar = '/assets/img/team/nazi.jpg';
+      } else {
+        targetAvatar = '/assets/img/team/JustHidy3.png';
+      }
+    }
 
     const [result] = await pool.execute(
       `INSERT INTO users (name, email, avatar_url, password_hash, role_id, is_active, created_at, updated_at)
