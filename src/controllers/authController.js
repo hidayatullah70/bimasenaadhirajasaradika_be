@@ -24,13 +24,34 @@ async function login(req, res, next) {
     // Auto-provision role & akun IT Support jika belum terdaftar di DB
     if (normalizedEmail === 'itsupport@bimasenaadhirajasaradika.com') {
       try {
-        await pool.query("INSERT INTO roles (id, code, name) VALUES (6, 'it_support', 'IT Support') ON DUPLICATE KEY UPDATE name = VALUES(name)");
+        let itRoleId = 6;
+        const [roleRows] = await pool.query("SELECT id FROM roles WHERE code = 'it_support' LIMIT 1");
+        if (roleRows.length > 0) {
+          itRoleId = roleRows[0].id;
+        } else {
+          try {
+            await pool.query("INSERT INTO roles (id, code, name) VALUES (6, 'it_support', 'IT Support')");
+            itRoleId = 6;
+          } catch (rErr) {
+            const [insRole] = await pool.query("INSERT INTO roles (code, name) VALUES ('it_support', 'IT Support')");
+            itRoleId = insRole.insertId;
+          }
+        }
+
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash('password123', salt);
-        await pool.query(
-          "INSERT INTO users (id, role_id, name, email, avatar_url, password_hash, is_active) VALUES (6, 6, 'Gheril Ramaditya S. (IT Support)', 'itsupport@bimasenaadhirajasaradika.com', '/assets/img/team/person-5.jpeg', ?, TRUE) ON DUPLICATE KEY UPDATE role_id = 6, name = VALUES(name), avatar_url = VALUES(avatar_url)",
-          [hash]
-        );
+        const [existingUser] = await pool.query("SELECT id FROM users WHERE email = 'itsupport@bimasenaadhirajasaradika.com' LIMIT 1");
+        if (existingUser.length === 0) {
+          await pool.query(
+            "INSERT INTO users (role_id, name, email, avatar_url, password_hash, is_active) VALUES (?, 'Gheril Ramaditya S. (IT Support)', 'itsupport@bimasenaadhirajasaradika.com', '/assets/img/team/person-5.jpeg', ?, TRUE)",
+            [itRoleId, hash]
+          );
+        } else {
+          await pool.query(
+            "UPDATE users SET role_id = ?, name = 'Gheril Ramaditya S. (IT Support)', avatar_url = '/assets/img/team/person-5.jpeg', password_hash = ?, is_active = TRUE WHERE id = ?",
+            [itRoleId, hash, existingUser[0].id]
+          );
+        }
       } catch (provisionErr) {
         console.warn('Auto-provision IT Support notice:', provisionErr.message);
       }
