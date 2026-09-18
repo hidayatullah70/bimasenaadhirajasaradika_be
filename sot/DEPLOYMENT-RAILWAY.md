@@ -18,12 +18,13 @@ Sistem di-deploy dalam satu project Railway yang terdiri dari 2 services yang sa
 |   |  - Image: MySQL 8.0 (InnoDB)  |<---------|  - Node.js 20+ / Express REST  |   |
 |   |  - Private Port: 3306         | Network  |  - Auto Deploy via GitHub Repo |   |
 |   |  - Storage: Persistent Volume | Variable |  - Auto-Init Migration Enabled |   |
+|   |  - TCP Proxy / Public Network |          |                                |   |
 |   +-------------------------------+          +--------------------------------+   |
-|                                                              |                    |
-+--------------------------------------------------------------|--------------------+
-                                                               | Public URL (HTTPS)
-                                                               v
-                                   https://bimasenaadhirajasaradikabe-production.up.railway.app/api/v1
+|                   |                                          |                    |
++-------------------|------------------------------------------|--------------------+
+                    | Public TCP (e.g. proxy.rlwy.net:12345)   | Public URL (HTTPS)
+                    v                                          v
+      External CLI / DBeaver Import              https://bimasenaadhirajasaradikabe-production.up.railway.app/api/v1
 ```
 
 ---
@@ -53,8 +54,8 @@ Sistem di-deploy dalam satu project Railway yang terdiri dari 2 services yang sa
 1. Di dalam kanvas project Railway, klik tombol **"+ Create"** atau **"New Service"**.
 2. Pilih **"Database"** -> Pilih **"Add MySQL"**.
 3. Railway akan secara otomatis membuat container MySQL dan men-generate variabel koneksi standar:
-   - `MYSQLHOST`
-   - `MYSQLPORT` (biasanya `3306`)
+   - `MYSQLHOST` (Internal private host)
+   - `MYSQLPORT` (Internal port `3306`)
    - `MYSQLUSER` (`root`)
    - `MYSQLPASSWORD`
    - `MYSQLDATABASE` (`railway`)
@@ -130,7 +131,79 @@ async function autoInitDatabaseIfEmpty() {
 
 ---
 
-## 5. Verifikasi & Health Check Endpoints
+## 5. Panduan Import SQL via Public Network MySQL (TCP Proxy)
+
+Jika Anda ingin melakukan **import manual**, **reset ulang skema**, atau **restore database** menggunakan file `database/database.sql` secara langsung dari komputer lokal Anda ke database cloud Railway, ikuti langkah berikut:
+
+### 5.1 Mengaktifkan Public Networking (TCP Proxy) pada MySQL Service
+Secara default, container MySQL di Railway hanya dapat diakses melalui jaringan privat internal. Untuk mengaksesnya dari luar:
+1. Buka dashboard **Railway.com** -> Pilih Project Anda.
+2. Klik pada service **MySQL Database**.
+3. Buka tab **"Settings"**.
+4. Gulir ke bagian **"Public Networking"** (atau **"TCP Proxy"**).
+5. Klik tombol **"Generate Domain"** atau **"Add TCP Proxy"**.
+6. Railway akan menghasilkan koneksi publik berupa:
+   - **Public Host / Domain**: misal `viaduct.proxy.rlwy.net` atau `monorail.proxy.rlwy.net`
+   - **Public Port**: misal `54321` (port TCP 5 digit yang di-forward ke port 3306 container)
+   - **Public Connection URL**: `mysql://root:<PASSWORD>@<PUBLIC_HOST>:<PUBLIC_PORT>/railway`
+
+---
+
+### 5.2 Cara Import Menggunakan MySQL CLI (Terminal / Command Prompt / PowerShell)
+
+Buka terminal di root folder backend (`c:\laragon\www\barak\backend`), lalu jalankan salah satu perintah berikut:
+
+#### Opsi A: Menggunakan Parameter Host, Port, User, dan Database
+```bash
+mysql -h <PUBLIC_HOST> -P <PUBLIC_PORT> -u root -p<MYSQLPASSWORD> railway < database/database.sql
+```
+*Contoh konkret:*
+```bash
+mysql -h viaduct.proxy.rlwy.net -P 54321 -u root -pAbCdEf12345 railway < database/database.sql
+```
+
+#### Opsi B: Menggunakan Public Connection URI
+```bash
+mysql --uri="mysql://root:<MYSQLPASSWORD>@<PUBLIC_HOST>:<PUBLIC_PORT>/railway" < database/database.sql
+```
+
+---
+
+### 5.3 Cara Import Menggunakan GUI Client (DBeaver / TablePlus / HeidiSQL / Navicat)
+
+1. Buka aplikasi GUI Database favorit Anda (misal **DBeaver** atau **TablePlus**).
+2. Buat koneksi baru (*New Connection*) -> Pilih **MySQL**.
+3. Masukkan parameter koneksi dari tab **"Connect"** di Railway:
+   - **Host**: `<PUBLIC_HOST>` (contoh: `viaduct.proxy.rlwy.net`)
+   - **Port**: `<PUBLIC_PORT>` (contoh: `54321`)
+   - **Database**: `railway`
+   - **Username**: `root`
+   - **Password**: `<MYSQLPASSWORD>` (salin dari tab *Variables* Railway)
+4. Klik **Test Connection** -> Pastikan status *Connected (Success)*.
+5. Buka file [database/database.sql](file:///c:/laragon/www/barak/backend/database/database.sql) di editor SQL DBeaver/TablePlus, lalu klik **Execute Script / Run SQL** (`Ctrl + Enter` atau `Alt + X`).
+
+---
+
+### 5.4 Cara Import Menggunakan Railway CLI
+
+Jika Anda memiliki [Railway CLI](https://docs.railway.com/guides/cli) terinstal:
+```bash
+# 1. Login ke akun Railway
+railway login
+
+# 2. Link ke project
+railway link
+
+# 3. Eksekusi import file SQL langsung ke service MySQL
+railway connect MySQL < database/database.sql
+```
+
+> [!NOTE]
+> File `database/database.sql` telah dirancang aman (*idempotent*). Saat di-import, skrip otomatis membuat tabel dengan klausa `CREATE TABLE IF NOT EXISTS` dan mengisi seed master data dengan `ON DUPLICATE KEY UPDATE` tanpa merusak relasi foreign key.
+
+---
+
+## 6. Verifikasi & Health Check Endpoints
 
 Setelah deployment selesai, lakukan verifikasi endpoint produksi melalui browser atau curl:
 
@@ -167,7 +240,7 @@ curl -X POST https://bimasenaadhirajasaradikabe-production.up.railway.app/api/v1
 
 ---
 
-## 6. Sinkronisasi Frontend ke Production API
+## 7. Sinkronisasi Frontend ke Production API
 
 Pada aplikasi Frontend (`bimasenaadhirajasaradika_fe`), konfigurasi file `.env` diatur sebagai berikut:
 
@@ -178,7 +251,7 @@ VITE_API_BASE_URL=https://bimasenaadhirajasaradikabe-production.up.railway.app/a
 
 ---
 
-## 7. Pemeliharaan & Troubleshooting
+## 8. Pemeliharaan & Troubleshooting
 
 1. **Bagaimana jika melakukan commit baru ke GitHub?**
    - Railway secara otomatis mendeteksi setiap `git push` ke branch `main` dan menjalankan proses build & deployment ulang tanpa downtime (*Rolling Deployment*).
