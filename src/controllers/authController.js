@@ -21,6 +21,21 @@ async function login(req, res, next) {
       normalizedEmail = 'direktur@bimasenaadhirajasaradika.com';
     }
 
+    // Auto-provision role & akun IT Support jika belum terdaftar di DB
+    if (normalizedEmail === 'itsupport@bimasenaadhirajasaradika.com') {
+      try {
+        await pool.query("INSERT INTO roles (id, code, name) VALUES (6, 'it_support', 'IT Support') ON DUPLICATE KEY UPDATE name = VALUES(name)");
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash('password123', salt);
+        await pool.query(
+          "INSERT INTO users (id, role_id, name, email, avatar_url, password_hash, is_active) VALUES (6, 6, 'Gheril Ramaditya S. (IT Support)', 'itsupport@bimasenaadhirajasaradika.com', '/assets/img/team/person-5.jpeg', ?, TRUE) ON DUPLICATE KEY UPDATE role_id = 6, name = VALUES(name), avatar_url = VALUES(avatar_url)",
+          [hash]
+        );
+      } catch (provisionErr) {
+        console.warn('Auto-provision IT Support notice:', provisionErr.message);
+      }
+    }
+
     const [rows] = await pool.execute(
       `SELECT u.id, u.name, u.email, u.avatar_url,
               COALESCE(u.avatar_url, CONCAT('https://ui-avatars.com/api/?name=', REPLACE(u.name, ' ', '+'), '&background=0284c7&color=fff&size=128')) AS avatar,
