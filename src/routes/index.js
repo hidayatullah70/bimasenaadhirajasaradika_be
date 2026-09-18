@@ -15,6 +15,7 @@ const activityRoutes = require('./activityRoutes');
 const notificationRoutes = require('./notificationRoutes');
 const dashboardRoutes = require('./dashboardRoutes');
 const publicRoutes = require('./publicRoutes');
+const itRoutes = require('./itRoutes');
 
 // Base API v1 Index info
 router.get('/', (req, res) => {
@@ -68,6 +69,7 @@ router.use('/activities', activityRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/public', publicRoutes);
+router.use('/it', itRoutes);
 
 // Health check endpoint
 router.get('/health', (req, res) => {

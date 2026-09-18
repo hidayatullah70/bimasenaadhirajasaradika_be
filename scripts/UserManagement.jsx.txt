@@ -11,7 +11,7 @@ import { api } from '../../services/api/apiClient';
 import { UserCog, UserPlus, Mail, Lock, User, ShieldCheck, Trash2, Power, AlertTriangle, Check, Users, UserCheck, UserX } from 'lucide-react';
 
 const TEAM_AVATARS = [
-  { label: 'Hidayatullah (JustHidy)', path: '/assets/img/team/JustHidy3.png' },
+  { label: 'Hidayatullah (Admin)', path: '/assets/img/team/JustHidy3.png' },
   { label: 'Juli Priyanto (Direktur)', path: '/assets/img/team/person-3.jpeg' },
   { label: 'Robyn Topani (HRD)', path: '/assets/img/team/person-7.jpeg' },
   { label: 'Zaenal Arifin (Finance)', path: '/assets/img/team/person-4.jpeg' },
