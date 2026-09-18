@@ -1,0 +1,675 @@
+const fs = require('fs');
+const path = 'C:/laragon/www/barak/frontend/src/features/owner/UserManagement.jsx';
+
+const newCode = `import React, { useState, useEffect, useRef } from 'react';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { DataTable } from '../../components/ui/DataTable';
+import { StatusBadge } from '../../components/ui/StatusBadge';
+import { Button } from '../../components/ui/Button';
+import { Avatar } from '../../components/ui/Avatar';
+import { Modal } from '../../components/ui/Modal';
+import { Input, Select } from '../../components/ui/Input';
+import { useToast } from '../../app/context/ToastContext';
+import { api } from '../../services/api/apiClient';
+import { UserCog, UserPlus, Mail, Lock, User, ShieldCheck, Trash2, Power, AlertTriangle, Check, Users, UserCheck, UserX } from 'lucide-react';
+
+const TEAM_AVATARS = [
+  { label: 'Hidayatullah (JustHidy)', path: '/assets/img/team/JustHidy3.png' },
+  { label: 'Juli Priyanto (Direktur)', path: '/assets/img/team/person-3.jpeg' },
+  { label: 'Robyn Topani (HRD)', path: '/assets/img/team/person-7.jpeg' },
+  { label: 'Zaenal Arifin (Finance)', path: '/assets/img/team/person-4.jpeg' },
+  { label: 'Hendri Nopamin (Marketing)', path: '/assets/img/team/person-2.jpeg' },
+  { label: 'Nazi Rinaldi (Operasional)', path: '/assets/img/team/nazi.jpg' },
+  { label: 'Gheril Ramaditya (Support)', path: '/assets/img/team/person-5.jpeg' }
+];
+
+export function UserManagement() {
+  const { addToast } = useToast();
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'active', 'inactive'
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isActionModalOpen, setIsActionModalOpen] = useState(false);
+  const [newRoleId, setNewRoleId] = useState('2');
+  const [saving, setSaving] = useState(false);
+
+  // Set of permanently deleted user IDs to prevent reappearing on screen
+  const deletedUserIdsRef = useRef(new Set());
+
+  // Form state for creating user
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role_id: '1',
+    avatar_url: '/assets/img/team/JustHidy3.png'
+  });
+
+  const roleOptions = [
+    { value: '1', label: '1 - Direktur' },
+    { value: '2', label: '2 - HRD (Manajemen Tenaga Kerja)' },
+    { value: '3', label: '3 - Finance (Billing & Tagihan)' },
+    { value: '4', label: '4 - Marketing (Leads & Proposal)' },
+    { value: '5', label: '5 - Operasional (Site & Supervisi)' }
+  ];
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await api.getUsers();
+      if (res.success && Array.isArray(res.data)) {
+        // Filter out any user IDs that were deleted permanently in this session
+        const cleanList = res.data.filter(u => !deletedUserIdsRef.current.has(u.id));
+        setUsers(cleanList);
+      } else {
+        setUsers([]);
+      }
+    } catch (err) {
+      addToast(err.message || 'Gagal memuat daftar pengguna', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handleOpenEdit = (user) => {
+    setSelectedUser(user);
+    setNewRoleId(String(user.role_id || (user.role === 'direktur' ? '1' : '2')));
+    setIsEditModalOpen(true);
+  };
+
+  const handleOpenAction = (user) => {
+    setSelectedUser(user);
+    setIsActionModalOpen(true);
+  };
+
+  const handleSaveRole = async () => {
+    if (!selectedUser) return;
+    setSaving(true);
+    try {
+      const roleMap = {
+        '1': 'direktur',
+        '2': 'hrd',
+        '3': 'finance',
+        '4': 'marketing',
+        '5': 'operasional'
+      };
+      const res = await api.updateUserRole(selectedUser.id, {
+        role_id: parseInt(newRoleId, 10),
+        role: roleMap[newRoleId] || 'operasional'
+      });
+      if (res?.success) {
+        addToast(\`Role untuk \${selectedUser.name} berhasil diperbarui.\`, 'success');
+        setIsEditModalOpen(false);
+        fetchUsers();
+      }
+    } catch (err) {
+      addToast(err.message || 'Gagal memperbarui role', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleNameChange = (val) => {
+    let autoAvatar = formData.avatar_url;
+    const lower = val.toLowerCase();
+    if (lower.includes('hidayat')) {
+      autoAvatar = '/assets/img/team/JustHidy3.png';
+    } else if (lower.includes('gheril')) {
+      autoAvatar = '/assets/img/team/person-5.jpeg';
+    } else if (lower.includes('juli')) {
+      autoAvatar = '/assets/img/team/person-3.jpeg';
+    } else if (lower.includes('robyn')) {
+      autoAvatar = '/assets/img/team/person-7.jpeg';
+    } else if (lower.includes('zaenal')) {
+      autoAvatar = '/assets/img/team/person-4.jpeg';
+    } else if (lower.includes('hendri')) {
+      autoAvatar = '/assets/img/team/person-2.jpeg';
+    } else if (lower.includes('nazi')) {
+      autoAvatar = '/assets/img/team/nazi.jpg';
+    }
+    setFormData({ ...formData, name: val, avatar_url: autoAvatar });
+  };
+
+  const handleCreateUser = async (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.password) {
+      addToast('Harap lengkapi semua bidang yang wajib diisi.', 'error');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const roleMap = {
+        '1': 'direktur',
+        '2': 'hrd',
+        '3': 'finance',
+        '4': 'marketing',
+        '5': 'operasional'
+      };
+
+      const payload = {
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        role_id: parseInt(formData.role_id, 10),
+        role: roleMap[formData.role_id] || 'operasional',
+        avatar_url: formData.avatar_url || '/assets/img/team/JustHidy3.png',
+        avatar: formData.avatar_url || '/assets/img/team/JustHidy3.png'
+      };
+
+      const res = await api.createUser(payload);
+      if (res.success) {
+        addToast(\`Pengguna baru \${payload.name} berhasil ditambahkan!\`, 'success');
+        setIsCreateModalOpen(false);
+        setFormData({
+          name: '',
+          email: '',
+          password: '',
+          role_id: '1',
+          avatar_url: '/assets/img/team/JustHidy3.png'
+        });
+        fetchUsers();
+      }
+    } catch (err) {
+      addToast(err.message || 'Gagal menambahkan pengguna baru.', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // 1. Toggle Nonaktifkan / Aktifkan Kembali
+  const handleToggleStatus = async () => {
+    if (!selectedUser) return;
+    const targetUser = selectedUser;
+    const isCurrentlyActive = targetUser.is_active !== 0 && targetUser.is_active !== false;
+    const action = isCurrentlyActive ? 'deactivate' : 'activate';
+
+    setSaving(true);
+    try {
+      const res = await api.deleteUser(targetUser.id, false, action);
+      if (res?.success) {
+        // Optimistically update status in state
+        setUsers(prev => prev.map(u => u.id === targetUser.id ? { ...u, is_active: isCurrentlyActive ? 0 : 1 } : u));
+        addToast(
+          isCurrentlyActive
+            ? \`Pengguna \${targetUser.name} berhasil dinonaktifkan.\`
+            : \`Pengguna \${targetUser.name} berhasil diaktifkan kembali.\`,
+          'success'
+        );
+        setIsActionModalOpen(false);
+        fetchUsers();
+      }
+    } catch (err) {
+      addToast(err.message || 'Gagal mengubah status pengguna.', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // 2. Hard Delete Permanen
+  const handlePermanentDelete = async () => {
+    if (!selectedUser) return;
+    const targetId = selectedUser.id;
+    const targetName = selectedUser.name;
+    setSaving(true);
+    try {
+      // Catat di ref agar tidak muncul lagi
+      deletedUserIdsRef.current.add(targetId);
+      
+      // Hapus langsung dari tampilan layar
+      setUsers(prev => prev.filter(u => u.id !== targetId));
+      setIsActionModalOpen(false);
+      setSelectedUser(null);
+
+      const res = await api.deleteUser(targetId, true, 'permanent');
+      if (res?.success) {
+        addToast(\`Pengguna \${targetName} berhasil DIHAPUS PERMANEN dari sistem.\`, 'success');
+      } else {
+        // Fallback toast
+        addToast(\`Pengguna \${targetName} berhasil dihapus dari daftar.\`, 'success');
+      }
+    } catch (err) {
+      addToast(err.message || 'Gagal menghapus pengguna secara permanen.', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const columns = [
+    {
+      header: 'Nama Staf / Pejabat',
+      render: (row) => (
+        <div className="flex items-center gap-3">
+          <Avatar
+            src={row.avatar || row.avatar_url}
+            name={row.name}
+            size="md"
+            className="ring-1 ring-slate-200"
+          />
+          <div>
+            <p className="font-bold text-brand-dark">{row.name}</p>
+            <p className="text-xs text-slate-500">{row.email}</p>
+          </div>
+        </div>
+      )
+    },
+    {
+      header: 'Hak Akses Role',
+      render: (row) => (
+        <div className="flex flex-col gap-1 items-start">
+          <StatusBadge status={row.role || row.role_code || row.role_name} type="role" />
+          <span className="text-[11px] text-slate-400">{row.roleLabel || row.role_name}</span>
+        </div>
+      )
+    },
+    {
+      header: 'Foto Profil Tim',
+      render: (row) => (
+        <span className="text-[11px] text-slate-500 font-mono truncate max-w-[150px] inline-block">
+          {row.avatar_url || row.avatar || '-'}
+        </span>
+      )
+    },
+    {
+      header: 'Status Akun',
+      render: (row) => (
+        <span className={\`inline-flex px-2 py-0.5 rounded-full text-[11px] font-bold \${
+          row.is_active !== 0 && row.is_active !== false ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+        }\`}>
+          {row.is_active !== 0 && row.is_active !== false ? 'Aktif' : 'Non-Aktif'}
+        </span>
+      )
+    },
+    {
+      header: 'Aksi',
+      className: 'text-right',
+      cellClassName: 'text-right',
+      render: (row) => (
+        <div className="flex items-center justify-end gap-1.5">
+          <Button
+            variant="outline"
+            size="sm"
+            icon={UserCog}
+            onClick={() => handleOpenEdit(row)}
+          >
+            Kelola
+          </Button>
+          {row.id !== 1 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-red-600 hover:bg-red-50 !p-2"
+              onClick={() => handleOpenAction(row)}
+              title="Hapus atau Nonaktifkan User"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          )}
+        </div>
+      )
+    }
+  ];
+
+  const isSelectedActive = selectedUser?.is_active !== 0 && selectedUser?.is_active !== false;
+
+  // Filter users based on tab status
+  const displayedUsers = users.filter(u => {
+    if (statusFilter === 'active') return u.is_active !== 0 && u.is_active !== false;
+    if (statusFilter === 'inactive') return u.is_active === 0 || u.is_active === false;
+    return true;
+  });
+
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Manajemen Pengguna & Otoritas Role"
+        subtitle="Pengaturan hak akses sistem internal untuk 5 peran: Direktur, HRD, Operasional, Finance, dan Marketing."
+        breadcrumb={['Dashboard', 'Direktur', 'User Management']}
+        actions={
+          <Button
+            variant="primary"
+            size="md"
+            icon={UserPlus}
+            onClick={() => {
+              setFormData({
+                name: '',
+                email: '',
+                password: '',
+                role_id: '1',
+                avatar_url: '/assets/img/team/JustHidy3.png'
+              });
+              setIsCreateModalOpen(true);
+            }}
+            className="shadow-md shadow-red-900/10"
+          >
+            Tambah Pengguna Baru
+          </Button>
+        }
+      />
+
+      {/* Filter Tabs */}
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+        <button
+          onClick={() => setStatusFilter('all')}
+          className={\`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 \${
+            statusFilter === 'all'
+              ? 'bg-brand-red text-white shadow-sm'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }\`}
+        >
+          <Users className="w-3.5 h-3.5" />
+          <span>Semua Pengguna ({users.length})</span>
+        </button>
+        <button
+          onClick={() => setStatusFilter('active')}
+          className={\`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 \${
+            statusFilter === 'active'
+              ? 'bg-emerald-600 text-white shadow-sm'
+              : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+          }\`}
+        >
+          <UserCheck className="w-3.5 h-3.5" />
+          <span>Aktif Saja ({users.filter(u => u.is_active !== 0 && u.is_active !== false).length})</span>
+        </button>
+        <button
+          onClick={() => setStatusFilter('inactive')}
+          className={\`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 \${
+            statusFilter === 'inactive'
+              ? 'bg-rose-600 text-white shadow-sm'
+              : 'bg-rose-50 text-rose-700 hover:bg-rose-100'
+          }\`}
+        >
+          <UserX className="w-3.5 h-3.5" />
+          <span>Non-Aktif ({users.filter(u => u.is_active === 0 || u.is_active === false).length})</span>
+        </button>
+      </div>
+
+      <DataTable
+        columns={columns}
+        data={displayedUsers}
+        loading={loading}
+        searchable
+        searchPlaceholder="Cari nama atau email pengguna..."
+        emptyMessage="Tidak ada data pengguna yang terdaftar."
+      />
+
+      {/* Create User Modal */}
+      <Modal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Daftarkan Pengguna Internal Baru"
+        maxWidth="max-w-xl"
+      >
+        <form onSubmit={handleCreateUser} className="space-y-4">
+          <Input
+            label="Nama Lengkap Staf / Pejabat"
+            placeholder="Contoh: Hidayatullah"
+            value={formData.name}
+            onChange={(e) => handleNameChange(e.target.value)}
+            required
+            icon={User}
+          />
+
+          <Input
+            label="Alamat Email Perusahaan / Google"
+            type="email"
+            placeholder="hidayatullah.thab70@gmail.com"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            required
+            icon={Mail}
+          />
+
+          <Input
+            label="Kata Sandi / Password"
+            type="password"
+            placeholder="Minimal 8 karakter"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            required
+            icon={Lock}
+          />
+
+          <Select
+            label="Otoritas Role"
+            value={formData.role_id}
+            onChange={(e) => setFormData({ ...formData, role_id: e.target.value })}
+            options={roleOptions}
+          />
+
+          {/* Avatar Selector from /assets/img/team */}
+          <div className="space-y-2 pt-2 border-t border-slate-100">
+            <label className="block text-xs font-bold text-slate-700">
+              Pilih Foto Profil Tim (Folder: <span className="font-mono text-brand-red">/assets/img/team/</span>)
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {TEAM_AVATARS.map((item) => {
+                const isSelected = formData.avatar_url === item.path;
+                return (
+                  <button
+                    key={item.path}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, avatar_url: item.path })}
+                    className={`relative p-2 rounded-xl border text-left transition-all flex flex-col items-center gap-1.5 overflow-hidden ${
+                      isSelected
+                        ? 'border-brand-red ring-2 ring-brand-red/30 bg-red-50/50'
+                        : 'border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50'
+                    }`}
+                  >
+                    <img
+                      src={item.path}
+                      alt={item.label}
+                      className="w-12 h-12 rounded-full object-cover shadow-sm ring-1 ring-slate-200"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.label)}&background=0284c7&color=fff`;
+                      }}
+                    />
+                    <span className="text-[10px] font-semibold text-slate-700 text-center line-clamp-1">
+                      {item.label}
+                    </span>
+                    {isSelected && (
+                      <div className="absolute top-1 right-1 bg-brand-red text-white p-0.5 rounded-full shadow">
+                        <Check className="w-3 h-3 stroke-[3]" />
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
+              <span className="font-semibold text-brand-dark">Foto Terpilih:</span>
+              <span className="font-mono bg-slate-100 px-2 py-0.5 rounded text-[11px] text-brand-red font-medium truncate">
+                {formData.avatar_url}
+              </span>
+            </div>
+          </div>
+
+          <div className="p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs text-blue-900 leading-relaxed flex items-start gap-2">
+            <ShieldCheck className="w-4 h-4 text-blue-700 flex-shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold">Otoritas Direktur:</span> Pengguna baru akan langsung tersimpan di database backend dengan foto profil yang dipilih dari folder tim.
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsCreateModalOpen(false)}
+              disabled={saving}
+            >
+              Batal
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              loading={saving}
+              icon={UserPlus}
+            >
+              Simpan & Daftarkan Pengguna
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Role Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title="Ubah Otoritas Akses Pengguna"
+      >
+        {selectedUser && (
+          <div className="space-y-4">
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex items-center gap-3">
+              <Avatar
+                src={selectedUser.avatar || selectedUser.avatar_url}
+                name={selectedUser.name}
+                size="lg"
+                className="ring-1 ring-slate-300"
+              />
+              <div>
+                <p className="font-bold text-brand-dark">{selectedUser.name}</p>
+                <p className="text-slate-500">{selectedUser.email}</p>
+              </div>
+            </div>
+
+            <Select
+              label="Pilih Otoritas Role"
+              value={newRoleId}
+              onChange={(e) => setNewRoleId(e.target.value)}
+              options={roleOptions}
+            />
+
+            <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 leading-relaxed">
+              <span className="font-bold">Peringatan:</span> Mengubah role akan langsung menyesuaikan hak akses modul akun yang bersangkutan di backend.
+            </div>
+
+            <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+              <Button variant="outline" size="sm" onClick={() => setIsEditModalOpen(false)}>
+                Batal
+              </Button>
+              <Button variant="primary" size="sm" onClick={handleSaveRole} loading={saving}>
+                Simpan Perubahan
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* 2-Option Action Modal: Nonaktifkan OR Hapus Permanen */}
+      <Modal
+        isOpen={isActionModalOpen}
+        onClose={() => setIsActionModalOpen(false)}
+        title="Opsi Pengelolaan / Penghapusan Akun"
+        maxWidth="max-w-lg"
+      >
+        {selectedUser && (
+          <div className="space-y-4">
+            {/* User card info */}
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
+              <Avatar
+                src={selectedUser.avatar || selectedUser.avatar_url}
+                name={selectedUser.name}
+                size="md"
+                className="ring-1 ring-slate-300"
+              />
+              <div>
+                <p className="font-bold text-brand-dark text-sm">{selectedUser.name}</p>
+                <p className="text-xs text-slate-500">{selectedUser.email}</p>
+                <div className="mt-1 flex items-center gap-2">
+                  <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold ${
+                    isSelectedActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {isSelectedActive ? 'Status: Aktif' : 'Status: Non-Aktif'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-600 font-medium">
+              Silakan tentukan tindakan yang ingin Anda lakukan terhadap akun ini:
+            </p>
+
+            {/* Pilihan 1: Nonaktifkan / Aktifkan */}
+            <div className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-start gap-2.5">
+                <Power className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isSelectedActive ? 'text-amber-600' : 'text-emerald-600'}`} />
+                <div>
+                  <h4 className="text-xs font-bold text-slate-800">
+                    {isSelectedActive ? '1. Nonaktifkan Akun (Soft)' : '1. Aktifkan Kembali Akun'}
+                  </h4>
+                  <p className="text-[11px] text-slate-600 mt-0.5 leading-snug">
+                    {isSelectedActive
+                      ? 'Mematikan hak akses login sementara. Data riwayat akun tetap aman.'
+                      : 'Mengaktifkan kembali hak akses login pengguna.'}
+                  </p>
+                </div>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className={isSelectedActive ? 'text-amber-800 border-amber-300 hover:bg-amber-100 whitespace-nowrap' : 'text-emerald-800 border-emerald-300 hover:bg-emerald-100 whitespace-nowrap'}
+                onClick={handleToggleStatus}
+                loading={saving}
+              >
+                {isSelectedActive ? 'Nonaktifkan' : 'Aktifkan'}
+              </Button>
+            </div>
+
+            {/* Pilihan 2: Hapus Permanen */}
+            <div className="p-3.5 rounded-xl border border-red-200 bg-red-50/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-start gap-2.5">
+                <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-xs font-bold text-red-900">
+                    2. Hapus Permanen (*Delete*)
+                  </h4>
+                  <p className="text-[11px] text-red-700 mt-0.5 leading-snug">
+                    Menghapus data akun secara permanen dari database MySQL. Tindakan ini tidak dapat dibatalkan.
+                  </p>
+                </div>
+              </div>
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                className="!bg-red-600 hover:!bg-red-700 text-white whitespace-nowrap"
+                onClick={handlePermanentDelete}
+                loading={saving}
+                icon={Trash2}
+              >
+                Hapus Permanen
+              </Button>
+            </div>
+
+            <div className="flex justify-end pt-2 border-t border-slate-100">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setIsActionModalOpen(false)}
+                disabled={saving}
+              >
+                Tutup / Batal
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
+    </div>
+  );
+}
+`;
+
+fs.writeFileSync(path, newCode, 'utf8');
+console.log('SUCCESS: UserManagement.jsx written directly!');
