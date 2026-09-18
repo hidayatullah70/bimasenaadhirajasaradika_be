@@ -62,7 +62,7 @@ test('4. POST /api/v1/auth/login - Fails on invalid credentials', async () => {
   const res = await fetch(`${baseUrl}/api/v1/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: 'direktur@bhimasena.co.id', password: 'wrongpassword' })
+    body: JSON.stringify({ email: 'direktur@bimasenaadhirajasaradika.com', password: 'wrongpassword' })
   });
   const data = await res.json();
 
@@ -74,7 +74,7 @@ test('5. POST /api/v1/auth/login - Direktur login succeeds with valid token', as
   const res = await fetch(`${baseUrl}/api/v1/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: 'direktur@bhimasena.co.id', password: 'password123' })
+    body: JSON.stringify({ email: 'direktur@bimasenaadhirajasaradika.com', password: 'password123' })
   });
   const data = await res.json();
 

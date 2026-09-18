@@ -79,11 +79,11 @@ Semua akun demo di bawah ini telah di-hash menggunakan **Bcrypt** dengan kata sa
 
 | Peran (Role) | Email | Password | Hak Akses Utama |
 |---|---|---|---|
-| **Direktur** | `direktur@bhimasena.co.id` | `password` | Akses penuh seluruh modul (R/W), user & role management |
-| **HRD** | `hrd@bhimasena.co.id` | `password` | Manajemen karyawan, penempatan, rekap presensi (R/W) |
-| **Finance** | `finance@bhimasena.co.id` | `password` | Manajemen tagihan/invoice dan status pembayaran (R/W) |
-| **Marketing** | `marketing@bhimasena.co.id` | `password` | Pipeline CRM leads, data klien mitra, master layanan (R/W) |
-| **Operasional** | `operasional@bhimasena.co.id` | `password` | Penempatan personil lapangan, pencatatan presensi, site klien (R/W) |
+| **Direktur** | `direktur@bimasenaadhirajasaradika.com` | `password` | Akses penuh seluruh modul (R/W), user & role management |
+| **HRD** | `hrd@bimasenaadhirajasaradika.com` | `password` | Manajemen karyawan, penempatan, rekap presensi (R/W) |
+| **Finance** | `finance@bimasenaadhirajasaradika.com` | `password` | Manajemen tagihan/invoice dan status pembayaran (R/W) |
+| **Marketing** | `marketing@bimasenaadhirajasaradika.com` | `password` | Pipeline CRM leads, data klien mitra, master layanan (R/W) |
+| **Operasional** | `operasional@bimasenaadhirajasaradika.com` | `password` | Penempatan personil lapangan, pencatatan presensi, site klien (R/W) |
 
 ---
 

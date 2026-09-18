@@ -17,8 +17,8 @@ async function login(req, res, next) {
     }
 
     let normalizedEmail = email.trim().toLowerCase();
-    if (normalizedEmail === 'owner@bhimasena.co.id') {
-      normalizedEmail = 'direktur@bhimasena.co.id';
+    if (normalizedEmail === 'owner@bimasenaadhirajasaradika.com') {
+      normalizedEmail = 'direktur@bimasenaadhirajasaradika.com';
     }
 
     const [rows] = await pool.execute(

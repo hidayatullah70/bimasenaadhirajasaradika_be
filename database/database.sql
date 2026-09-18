@@ -318,11 +318,11 @@ ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `description` = VALUES(`descrip
 -- Bcrypt Hash: $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
 -- ------------------------------------------------------------------------------
 INSERT INTO `users` (`id`, `role_id`, `name`, `email`, `avatar_url`, `password_hash`, `is_active`) VALUES
-(1, 1, 'Juli Priyanto (Direktur)', 'direktur@bhimasena.co.id', '/assets/img/team/person-3.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-(2, 2, 'Robyn Topani (HRD)', 'hrd@bhimasena.co.id', '/assets/img/team/person-7.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-(3, 3, 'Zaenal Arifin (Finance)', 'finance@bhimasena.co.id', '/assets/img/team/person-4.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-(4, 4, 'Hendri Nopamin (Marketing)', 'marketing@bhimasena.co.id', '/assets/img/team/person-2.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-(5, 5, 'Nazi Rinaldi (operasional)', 'operasional@bhimasena.co.id', '/assets/img/team/nazi.jpg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE)
+(1, 1, 'Juli Priyanto (Direktur)', 'direktur@bimasenaadhirajasaradika.com', '/assets/img/team/person-3.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
+(2, 2, 'Robyn Topani (HRD)', 'hrd@bimasenaadhirajasaradika.com', '/assets/img/team/person-7.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
+(3, 3, 'Zaenal Arifin (Finance)', 'finance@bimasenaadhirajasaradika.com', '/assets/img/team/person-4.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
+(4, 4, 'Hendri Nopamin (Marketing)', 'marketing@bimasenaadhirajasaradika.com', '/assets/img/team/person-2.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
+(5, 5, 'Nazi Rinaldi (operasional)', 'operasional@bimasenaadhirajasaradika.com', '/assets/img/team/nazi.jpg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE)
 ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `role_id` = VALUES(`role_id`), `avatar_url` = VALUES(`avatar_url`);
 
 -- ------------------------------------------------------------------------------

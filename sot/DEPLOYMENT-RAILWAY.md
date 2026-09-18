@@ -121,11 +121,11 @@ async function autoInitDatabaseIfEmpty() {
 ### Hasil yang Dihasilkan Secara Otomatis:
 1. **12 Tabel Relasional**: `roles`, `users`, `services`, `clients`, `sites`, `employees`, `placements`, `invoices`, `leads`, `activity_logs`, `attendances`, `notifications`.
 2. **5 Akun Default Resmi**:
-   - `direktur@bhimasena.co.id` | **Juli Priyanto (Direktur)** | Foto: `/assets/img/team/person-3.jpeg`
-   - `hrd@bhimasena.co.id` | **Robyn Topani (HRD)** | Foto: `/assets/img/team/person-7.jpeg`
-   - `finance@bhimasena.co.id` | **Zaenal Arifin (Finance)** | Foto: `/assets/img/team/person-4.jpeg`
-   - `marketing@bhimasena.co.id` | **Hendri Nopamin (Marketing)** | Foto: `/assets/img/team/person-2.jpeg`
-   - `operasional@bhimasena.co.id` | **Nazi Rinaldi (operasional)** | Foto: `/assets/img/team/nazi.jpg`
+   - `direktur@bimasenaadhirajasaradika.com` | **Juli Priyanto (Direktur)** | Foto: `/assets/img/team/person-3.jpeg`
+   - `hrd@bimasenaadhirajasaradika.com` | **Robyn Topani (HRD)** | Foto: `/assets/img/team/person-7.jpeg`
+   - `finance@bimasenaadhirajasaradika.com` | **Zaenal Arifin (Finance)** | Foto: `/assets/img/team/person-4.jpeg`
+   - `marketing@bimasenaadhirajasaradika.com` | **Hendri Nopamin (Marketing)** | Foto: `/assets/img/team/person-2.jpeg`
+   - `operasional@bimasenaadhirajasaradika.com` | **Nazi Rinaldi (operasional)** | Foto: `/assets/img/team/nazi.jpg`
    - Password default seluruh akun: `password`.
 
 ---
@@ -162,7 +162,7 @@ curl -X GET https://bimasenaadhirajasaradikabe-production.up.railway.app/api/v1/
 ```bash
 curl -X POST https://bimasenaadhirajasaradikabe-production.up.railway.app/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"direktur@bhimasena.co.id","password":"password"}'
+  -d '{"email":"direktur@bimasenaadhirajasaradika.com","password":"password"}'
 ```
 
 ---

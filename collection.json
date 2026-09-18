@@ -102,7 +102,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"direktur@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"direktur@bimasenaadhirajasaradika.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/login",
@@ -140,7 +140,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"hrd@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"hrd@bimasenaadhirajasaradika.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/login",
@@ -178,7 +178,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"finance@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"finance@bimasenaadhirajasaradika.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/login",
@@ -216,7 +216,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"marketing@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"marketing@bimasenaadhirajasaradika.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/login",
@@ -254,7 +254,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"operasional@bhimasena.co.id\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"operasional@bimasenaadhirajasaradika.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/login",
@@ -1079,7 +1079,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Ahmad Fauzi\",\n  \"email\": \"ahmad.fauzi@bhimasena.co.id\",\n  \"password\": \"password123\",\n  \"role_id\": 2,\n  \"avatar_url\": \"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\",\n  \"is_active\": true\n}"
+              "raw": "{\n  \"name\": \"Ahmad Fauzi\",\n  \"email\": \"ahmad.fauzi@bimasenaadhirajasaradika.com\",\n  \"password\": \"password123\",\n  \"role_id\": 2,\n  \"avatar_url\": \"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150\",\n  \"is_active\": true\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/users",

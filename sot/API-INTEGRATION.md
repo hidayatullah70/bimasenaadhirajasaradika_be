@@ -112,7 +112,7 @@ Dokumen ini merupakan panduan integrasi resmi seluruh endpoint REST API PT. Bhim
 - **Request Body (JSON)**:
   ```json
   {
-    "email": "direktur@bhimasena.co.id",
+    "email": "direktur@bimasenaadhirajasaradika.com",
     "password": "password123"
   }
   ```
@@ -126,7 +126,7 @@ Dokumen ini merupakan panduan integrasi resmi seluruh endpoint REST API PT. Bhim
       "user": {
         "id": 1,
         "name": "Bhimasena Direktur",
-        "email": "direktur@bhimasena.co.id",
+        "email": "direktur@bimasenaadhirajasaradika.com",
         "avatar": "/assets/img/team/JustHidy3.jpeg",
         "avatar_url": "/assets/img/team/JustHidy3.jpeg",
         "role": "direktur",
@@ -154,7 +154,7 @@ Dokumen ini merupakan panduan integrasi resmi seluruh endpoint REST API PT. Bhim
     "data": {
       "id": 1,
       "name": "Bhimasena Direktur",
-      "email": "direktur@bhimasena.co.id",
+      "email": "direktur@bimasenaadhirajasaradika.com",
       "avatar": "/assets/img/team/JustHidy3.jpeg",
       "avatar_url": "/assets/img/team/JustHidy3.jpeg",
       "role": "direktur",
@@ -899,7 +899,7 @@ Dokumen ini merupakan panduan integrasi resmi seluruh endpoint REST API PT. Bhim
       {
         "id": 1,
         "name": "Bhimasena Direktur",
-        "email": "direktur@bhimasena.co.id",
+        "email": "direktur@bimasenaadhirajasaradika.com",
         "avatar": "/assets/img/team/JustHidy3.jpeg",
         "avatar_url": "/assets/img/team/JustHidy3.jpeg",
         "is_active": 1,
@@ -910,7 +910,7 @@ Dokumen ini merupakan panduan integrasi resmi seluruh endpoint REST API PT. Bhim
       {
         "id": 2,
         "name": "Robyn Topani (HRD)",
-        "email": "hrd@bhimasena.co.id",
+        "email": "hrd@bimasenaadhirajasaradika.com",
         "avatar": "https://ui-avatars.com/api/?name=Robyn+Topani&background=0284c7&color=fff&size=128",
         "avatar_url": null,
         "is_active": 1,
@@ -929,7 +929,7 @@ Dokumen ini merupakan panduan integrasi resmi seluruh endpoint REST API PT. Bhim
   ```json
   {
     "name": "Hidayatullah",
-    "email": "hidayatullah@bhimasena.co.id",
+    "email": "hidayatullah@bimasenaadhirajasaradika.com",
     "password": "password123",
     "role_id": 1,
     "avatar_url": "/assets/img/team/JustHidy3.jpeg",
@@ -944,7 +944,7 @@ Dokumen ini merupakan panduan integrasi resmi seluruh endpoint REST API PT. Bhim
     "data": {
       "id": 6,
       "name": "Hidayatullah",
-      "email": "hidayatullah@bhimasena.co.id",
+      "email": "hidayatullah@bimasenaadhirajasaradika.com",
       "role_id": 1,
       "avatar_url": "/assets/img/team/JustHidy3.jpeg",
       "avatar": "/assets/img/team/JustHidy3.jpeg"
