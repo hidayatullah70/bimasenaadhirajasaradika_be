@@ -21,11 +21,13 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
+const pkg = require('../package.json');
+
 // Root endpoint info
 app.get('/', (req, res) => {
   res.json({
     name: 'PT. Bhimasena Adhirajasa Radhika Backend API',
-    version: '1.0.0',
+    version: pkg.version,
     documentation: 'sot/04-API-SPEC.md',
     base_url: '/api/v1',
     status: 'online'
