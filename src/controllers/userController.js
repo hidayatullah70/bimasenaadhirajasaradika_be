@@ -111,25 +111,10 @@ async function createUser(req, res, next) {
     const passwordHash = await bcrypt.hash(password, salt);
     const activeStatus = is_active !== undefined ? (is_active ? 1 : 0) : 1;
     
-    // Prioritas: avatar_url input -> mapping nama tim -> default /assets/img/team/JustHidy3.png
+    // Prioritas: avatar_url input jika ada, jika kosong simpan null agar avatar otomatis menggunakan inisial nama
     let targetAvatar = (avatar_url || avatar || '').trim();
     if (!targetAvatar) {
-      const lowerName = name.trim().toLowerCase();
-      if (lowerName.includes('gheril')) {
-        targetAvatar = '/assets/img/team/person-5.jpeg';
-      } else if (lowerName.includes('juli')) {
-        targetAvatar = '/assets/img/team/person-3.jpeg';
-      } else if (lowerName.includes('robyn')) {
-        targetAvatar = '/assets/img/team/person-7.jpeg';
-      } else if (lowerName.includes('zaenal')) {
-        targetAvatar = '/assets/img/team/person-4.jpeg';
-      } else if (lowerName.includes('hendri')) {
-        targetAvatar = '/assets/img/team/person-2.jpeg';
-      } else if (lowerName.includes('nazi')) {
-        targetAvatar = '/assets/img/team/nazi.jpg';
-      } else {
-        targetAvatar = '/assets/img/team/JustHidy3.png';
-      }
+      targetAvatar = null;
     }
 
     const [result] = await pool.execute(
@@ -189,10 +174,10 @@ async function updateUser(req, res, next) {
       }
     }
 
-    if (avatar_url || avatar) {
-      const newAvatar = (avatar_url || avatar).trim();
+    if (avatar_url !== undefined || avatar !== undefined) {
+      const newAvatar = (avatar_url !== undefined ? avatar_url : avatar || '').trim();
       updates.push('avatar_url = ?');
-      params.push(newAvatar);
+      params.push(newAvatar ? newAvatar : null);
     }
 
     if (password) {
