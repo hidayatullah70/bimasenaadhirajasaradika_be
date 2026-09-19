@@ -324,8 +324,8 @@ INSERT INTO `users` (`id`, `role_id`, `name`, `email`, `avatar_url`, `password_h
 (3, 3, 'Zaenal Arifin (Finance)', 'finance@bimasenaadhirajasaradika.com', '/assets/img/team/person-4.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
 (4, 4, 'Hendri Nopamin (Marketing)', 'marketing@bimasenaadhirajasaradika.com', '/assets/img/team/person-2.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
 (5, 5, 'Nazi Rinaldi (operasional)', 'operasional@bimasenaadhirajasaradika.com', '/assets/img/team/nazi.jpg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-  (6, 6, 'Gheril Ramaditya S. (IT Support)', 'itsupport@bimasenaadhirajasaradika.com', '/assets/img/team/person-5.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE)
-ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `role_id` = VALUES(`role_id`), `avatar_url` = VALUES(`avatar_url`);
+(6, 6, 'Gheril Ramaditya S. (IT Support)', 'itsupport@bimasenaadhirajasaradika.com', '/assets/img/team/person-5.jpeg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
+(7, 7, 'Hidayatullah', 'hidayatullah.ofc@gmail.com', '/assets/img/team/jusHidy3.png', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE);
 
 -- ------------------------------------------------------------------------------
 -- 4. Seed Clients (Sample Data)

@@ -104,19 +104,28 @@ async function autoInitDatabaseIfEmpty() {
         );
         console.log('[Auto-Init] Akun IT Support (Gheril Ramaditya S.) berhasil disinkronkan ke database.');
       }
-      // Pastikan akun Admin (Hidayatullah) tersedia
+            // Hapus permanen thab70 dari database
+      try {
+        await pool.query("DELETE FROM users WHERE email = 'hidayatullah.thab70@gmail.com' OR email LIKE '%thab70%'");
+      } catch (delThabErr) {}
+
+      // Pastikan akun Admin (Hidayatullah) tersedia & Aktif (is_active = 1)
       const [adminUser] = await pool.query("SELECT id FROM users WHERE email = 'hidayatullah.ofc@gmail.com' LIMIT 1");
+      const bcrypt = require('bcryptjs');
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash('Merdek@122', salt);
       if (adminUser.length === 0) {
-        const bcrypt = require('bcryptjs');
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash('Merdek@122', salt);
         await pool.query(
           "INSERT INTO users (role_id, name, email, avatar_url, password_hash, is_active) " +
           "VALUES (7, 'Hidayatullah', 'hidayatullah.ofc@gmail.com', '/assets/img/team/jusHidy3.png', ?, TRUE) " +
-          "ON DUPLICATE KEY UPDATE role_id = 7, name = VALUES(name), avatar_url = VALUES(avatar_url);",
+          "ON DUPLICATE KEY UPDATE role_id = 7, name = VALUES(name), avatar_url = VALUES(avatar_url), is_active = TRUE;",
           [hash]
         );
         console.log('[Auto-Init] Akun Admin (Hidayatullah) berhasil disinkronkan ke database.');
+      } else {
+        await pool.query(
+          "UPDATE users SET role_id = 7, name = 'Hidayatullah', avatar_url = '/assets/img/team/jusHidy3.png', is_active = 1 WHERE email = 'hidayatullah.ofc@gmail.com'"
+        );
       }
 
 

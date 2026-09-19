@@ -16,7 +16,7 @@ async function getUsers(req, res, next) {
     const role = req.query.role || null;
     const status = req.query.status !== undefined ? req.query.status : null;
 
-    let whereClauses = ['1=1', "u.email NOT LIKE '%hidayatullah%'", "u.name NOT LIKE '%hidayatullah%'"];
+    let whereClauses = ['1=1', "u.email NOT LIKE '%thab70%'"];
     let params = [];
 
     if (search) {
