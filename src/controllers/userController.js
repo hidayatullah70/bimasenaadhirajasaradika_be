@@ -16,7 +16,7 @@ async function getUsers(req, res, next) {
     const role = req.query.role || null;
     const status = req.query.status !== undefined ? req.query.status : null;
 
-    let whereClauses = ['1=1', "u.email NOT LIKE '%thab70%'"];
+    let whereClauses = ['1=1', "u.email NOT LIKE '%thab70%'", "u.email != 'aisyah@bimasenaadhirajasaradika.com'"];
     let params = [];
 
     if (search) {
@@ -251,7 +251,8 @@ async function updateUser(req, res, next) {
 async function deleteUser(req, res, next) {
   try {
     const { id } = req.params;
-    const { permanent, hard, action } = req.query;
+    const isSoftDeactivate = req.query.action === 'deactivate' || req.body?.action === 'deactivate';
+    const isActivate = req.query.action === 'activate' || req.body?.action === 'activate';
 
     if (parseInt(id, 10) === 1) {
       return errorResponse(res, 'Akun Direktur Utama tidak dapat dihapus atau dinonaktifkan.', null, 403);
@@ -264,61 +265,47 @@ async function deleteUser(req, res, next) {
 
     const user = existing[0];
 
-    // 1. HARD DELETE PERMANENT
-    if (permanent === 'true' || hard === 'true' || action === 'permanent') {
-      // Unlink safely from foreign key tables
-      await pool.execute('UPDATE placements SET created_by = NULL WHERE created_by = ?', [id]).catch(() => {});
-      await pool.execute('UPDATE invoices SET created_by = NULL WHERE created_by = ?', [id]).catch(() => {});
-      await pool.execute('UPDATE attendances SET recorded_by = NULL WHERE recorded_by = ?', [id]).catch(() => {});
-      await pool.execute('UPDATE activity_logs SET user_id = NULL WHERE user_id = ?', [id]).catch(() => {});
-      await pool.execute('DELETE FROM notifications WHERE user_id = ?', [id]).catch(() => {});
+    // 1. SOFT TOGGLE IF EXPLICITLY REQUESTED
+    if (isSoftDeactivate || isActivate) {
+      const newStatus = isActivate ? 1 : 0;
+      const actionText = newStatus === 1 ? 'diaktifkan kembali' : 'dinonaktifkan';
 
-      const [result] = await pool.execute('DELETE FROM users WHERE id = ?', [id]);
+      await pool.execute('UPDATE users SET is_active = ?, updated_at = NOW() WHERE id = ?', [newStatus, id]);
 
       await logActivity({
         userId: req.user.id,
-        action: 'DELETE',
+        action: newStatus === 1 ? 'ACTIVATE' : 'DEACTIVATE',
         resource: 'users',
         resourceId: id,
-        beforeData: { name: user.name, email: user.email },
-        afterData: { deleted: true }
+        afterData: { is_active: newStatus === 1 }
       });
 
-      return successResponse(res, { id, name: user.name, deleted: true }, `Pengguna ${user.name} berhasil dihapus permanen dari sistem.`);
+      return successResponse(
+        res,
+        { id, name: user.name, is_active: newStatus === 1 },
+        `Pengguna ${user.name} berhasil ${actionText}.`
+      );
     }
 
-    // 2. TOGGLE / SOFT DEACTIVATE (or ACTIVATE)
-    const newStatus = action === 'activate' ? 1 : 0;
-    const actionText = newStatus === 1 ? 'diaktifkan kembali' : 'dinonaktifkan';
+    // 2. DEFAULT: HARD DELETE PERMANENT
+    await pool.execute('UPDATE placements SET created_by = NULL WHERE created_by = ?', [id]).catch(() => {});
+    await pool.execute('UPDATE invoices SET created_by = NULL WHERE created_by = ?', [id]).catch(() => {});
+    await pool.execute('UPDATE attendances SET recorded_by = NULL WHERE recorded_by = ?', [id]).catch(() => {});
+    await pool.execute('UPDATE activity_logs SET user_id = NULL WHERE user_id = ?', [id]).catch(() => {});
+    await pool.execute('DELETE FROM notifications WHERE user_id = ?', [id]).catch(() => {});
 
-    await pool.execute('UPDATE users SET is_active = ?, updated_at = NOW() WHERE id = ?', [newStatus, id]);
+    await pool.execute('DELETE FROM users WHERE id = ?', [id]);
 
     await logActivity({
       userId: req.user.id,
-      action: newStatus === 1 ? 'ACTIVATE' : 'DEACTIVATE',
+      action: 'DELETE',
       resource: 'users',
       resourceId: id,
-      afterData: { is_active: newStatus === 1 }
+      beforeData: { name: user.name, email: user.email },
+      afterData: { deleted: true }
     });
 
-    return successResponse(
-      res,
-      { id, name: user.name, is_active: newStatus === 1 },
-      `Pengguna ${user.name} berhasil ${actionText}.`
-    );
-  } catch (err) {
-    next(err);
-  }
-}
-
-/**
- * GET /api/v1/roles
- * SOT Reference: 04-API-SPEC.md Section 3
- */
-async function getRoles(req, res, next) {
-  try {
-    const [rows] = await pool.execute('SELECT id, code, name, created_at FROM roles ORDER BY id ASC');
-    return successResponse(res, rows, 'Daftar role berhasil diambil.');
+    return successResponse(res, { id, name: user.name, deleted: true }, `Pengguna ${user.name} berhasil dihapus permanen dari sistem.`);
   } catch (err) {
     next(err);
   }

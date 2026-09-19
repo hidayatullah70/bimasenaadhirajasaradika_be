@@ -104,9 +104,10 @@ async function autoInitDatabaseIfEmpty() {
         );
         console.log('[Auto-Init] Akun IT Support (Gheril Ramaditya S.) berhasil disinkronkan ke database.');
       }
-            // Hapus permanen thab70 dari database
+                  // Hapus permanen thab70 dan user aisyah dari database
       try {
         await pool.query("DELETE FROM users WHERE email = 'hidayatullah.thab70@gmail.com' OR email LIKE '%thab70%'");
+        await pool.query("DELETE FROM users WHERE email = 'aisyah@bimasenaadhirajasaradika.com' OR (name = 'Aisyah' AND is_active = 0)");
       } catch (delThabErr) {}
 
       // Pastikan akun Admin (Hidayatullah) tersedia & Aktif (is_active = 1)
