@@ -34,7 +34,7 @@ async function getClients(req, res, next) {
     const [rows] = await pool.query(
       `SELECT c.*,
               (SELECT COUNT(*) FROM sites s WHERE s.client_id = c.id) AS sites_count,
-              (SELECT COUNT(*) FROM placements p WHERE p.client_id = c.id AND p.status = 'active') AS active_placements_count
+              (SELECT COUNT(*) FROM placements p WHERE p.client_id = c.id AND LOWER(p.status) IN ('active','aktif')) AS active_placements_count
        FROM clients c
        WHERE ${whereSql}
        ORDER BY c.${sort} ${order}
