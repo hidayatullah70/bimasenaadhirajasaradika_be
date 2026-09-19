@@ -456,11 +456,11 @@ export function UserManagement() {
                     key={item.path}
                     type="button"
                     onClick={() => setFormData({ ...formData, avatar_url: item.path })}
-                    className={`relative p-2 rounded-xl border text-left transition-all flex flex-col items-center gap-1.5 overflow-hidden ${
-                      isSelected
-                        ? 'border-brand-red ring-2 ring-brand-red/30 bg-red-50/50'
-                        : 'border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50'
-                    }`}
+                    className={`relative p-2 rounded - xl border text - left transition - all flex flex - col items - center gap - 1.5 overflow - hidden ${
+  isSelected
+    ? 'border-brand-red ring-2 ring-brand-red/30 bg-red-50/50'
+    : 'border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50'
+} `}
                   >
                     <img
                       src={item.path}
@@ -471,25 +471,25 @@ export function UserManagement() {
                         e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.label)}&background=0284c7&color=fff`;
                       }}
                     />
-                    <span className="text-[10px] font-semibold text-slate-700 text-center line-clamp-1">
-                      {item.label}
-                    </span>
-                    {isSelected && (
-                      <div className="absolute top-1 right-1 bg-brand-red text-white p-0.5 rounded-full shadow">
-                        <Check className="w-3 h-3 stroke-[3]" />
-                      </div>
-                    )}
-                  </button>
+  < span className = "text-[10px] font-semibold text-slate-700 text-center line-clamp-1" >
+    { item.label }
+                    </span >
+  { isSelected && (
+    <div className="absolute top-1 right-1 bg-brand-red text-white p-0.5 rounded-full shadow">
+      <Check className="w-3 h-3 stroke-[3]" />
+    </div>
+  )}
+                  </button >
                 );
               })}
-            </div>
-            <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
-              <span className="font-semibold text-brand-dark">Foto Terpilih:</span>
-              <span className="font-mono bg-slate-100 px-2 py-0.5 rounded text-[11px] text-brand-red font-medium truncate">
-                {formData.avatar_url}
-              </span>
-            </div>
-          </div>
+            </div >
+  <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
+    <span className="font-semibold text-brand-dark">Foto Terpilih:</span>
+    <span className="font-mono bg-slate-100 px-2 py-0.5 rounded text-[11px] text-brand-red font-medium truncate">
+      {formData.avatar_url}
+    </span>
+  </div>
+          </div >
 
           <div className="p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs text-blue-900 leading-relaxed flex items-start gap-2">
             <ShieldCheck className="w-4 h-4 text-blue-700 flex-shrink-0 mt-0.5" />
@@ -518,155 +518,154 @@ export function UserManagement() {
               Simpan & Daftarkan Pengguna
             </Button>
           </div>
-        </form>
-      </Modal>
+        </form >
+      </Modal >
 
-      {/* Edit Role Modal */}
-      <Modal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        title="Ubah Otoritas Akses Pengguna"
-      >
-        {selectedUser && (
-          <div className="space-y-4">
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex items-center gap-3">
-              <Avatar
-                src={selectedUser.avatar || selectedUser.avatar_url}
-                name={selectedUser.name}
-                size="lg"
-                className="ring-1 ring-slate-300"
-              />
-              <div>
-                <p className="font-bold text-brand-dark">{selectedUser.name}</p>
-                <p className="text-slate-500">{selectedUser.email}</p>
-              </div>
-            </div>
+  {/* Edit Role Modal */ }
+  < Modal
+isOpen = { isEditModalOpen }
+onClose = {() => setIsEditModalOpen(false)}
+title = "Ubah Otoritas Akses Pengguna"
+  >
+  { selectedUser && (
+    <div className="space-y-4">
+      <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex items-center gap-3">
+        <Avatar
+          src={selectedUser.avatar || selectedUser.avatar_url}
+          name={selectedUser.name}
+          size="lg"
+          className="ring-1 ring-slate-300"
+        />
+        <div>
+          <p className="font-bold text-brand-dark">{selectedUser.name}</p>
+          <p className="text-slate-500">{selectedUser.email}</p>
+        </div>
+      </div>
 
-            <Select
-              label="Pilih Otoritas Role"
-              value={newRoleId}
-              onChange={(e) => setNewRoleId(e.target.value)}
-              options={roleOptions}
-            />
+      <Select
+        label="Pilih Otoritas Role"
+        value={newRoleId}
+        onChange={(e) => setNewRoleId(e.target.value)}
+        options={roleOptions}
+      />
 
-            <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 leading-relaxed">
-              <span className="font-bold">Peringatan:</span> Mengubah role akan langsung menyesuaikan hak akses modul akun yang bersangkutan di backend.
-            </div>
+      <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 leading-relaxed">
+        <span className="font-bold">Peringatan:</span> Mengubah role akan langsung menyesuaikan hak akses modul akun yang bersangkutan di backend.
+      </div>
 
-            <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
-              <Button variant="outline" size="sm" onClick={() => setIsEditModalOpen(false)}>
-                Batal
-              </Button>
-              <Button variant="primary" size="sm" onClick={handleSaveRole} loading={saving}>
-                Simpan Perubahan
-              </Button>
-            </div>
-          </div>
-        )}
-      </Modal>
-
-      {/* 2-Option Action Modal: Nonaktifkan OR Hapus Permanen */}
-      <Modal
-        isOpen={isActionModalOpen}
-        onClose={() => setIsActionModalOpen(false)}
-        title="Opsi Pengelolaan / Penghapusan Akun"
-        maxWidth="max-w-lg"
-      >
-        {selectedUser && (
-          <div className="space-y-4">
-            {/* User card info */}
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
-              <Avatar
-                src={selectedUser.avatar || selectedUser.avatar_url}
-                name={selectedUser.name}
-                size="md"
-                className="ring-1 ring-slate-300"
-              />
-              <div>
-                <p className="font-bold text-brand-dark text-sm">{selectedUser.name}</p>
-                <p className="text-xs text-slate-500">{selectedUser.email}</p>
-                <div className="mt-1 flex items-center gap-2">
-                  <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold ${
-                    isSelectedActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
-                  }`}>
-                    {isSelectedActive ? 'Status: Aktif' : 'Status: Non-Aktif'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-xs text-slate-600 font-medium">
-              Silakan tentukan tindakan yang ingin Anda lakukan terhadap akun ini:
-            </p>
-
-            {/* Pilihan 1: Nonaktifkan / Aktifkan */}
-            <div className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div className="flex items-start gap-2.5">
-                <Power className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isSelectedActive ? 'text-amber-600' : 'text-emerald-600'}`} />
-                <div>
-                  <h4 className="text-xs font-bold text-slate-800">
-                    {isSelectedActive ? '1. Nonaktifkan Akun (Soft)' : '1. Aktifkan Kembali Akun'}
-                  </h4>
-                  <p className="text-[11px] text-slate-600 mt-0.5 leading-snug">
-                    {isSelectedActive
-                      ? 'Mematikan hak akses login sementara. Data riwayat akun tetap aman.'
-                      : 'Mengaktifkan kembali hak akses login pengguna.'}
-                  </p>
-                </div>
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className={isSelectedActive ? 'text-amber-800 border-amber-300 hover:bg-amber-100 whitespace-nowrap' : 'text-emerald-800 border-emerald-300 hover:bg-emerald-100 whitespace-nowrap'}
-                onClick={handleToggleStatus}
-                loading={saving}
-              >
-                {isSelectedActive ? 'Nonaktifkan' : 'Aktifkan'}
-              </Button>
-            </div>
-
-            {/* Pilihan 2: Hapus Permanen */}
-            <div className="p-3.5 rounded-xl border border-red-200 bg-red-50/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div className="flex items-start gap-2.5">
-                <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-xs font-bold text-red-900">
-                    2. Hapus Permanen (*Delete*)
-                  </h4>
-                  <p className="text-[11px] text-red-700 mt-0.5 leading-snug">
-                    Menghapus data akun secara permanen dari database MySQL. Tindakan ini tidak dapat dibatalkan.
-                  </p>
-                </div>
-              </div>
-              <Button
-                type="button"
-                variant="primary"
-                size="sm"
-                className="!bg-red-600 hover:!bg-red-700 text-white whitespace-nowrap"
-                onClick={handlePermanentDelete}
-                loading={saving}
-                icon={Trash2}
-              >
-                Hapus Permanen
-              </Button>
-            </div>
-
-            <div className="flex justify-end pt-2 border-t border-slate-100">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setIsActionModalOpen(false)}
-                disabled={saving}
-              >
-                Tutup / Batal
-              </Button>
-            </div>
-          </div>
-        )}
-      </Modal>
+      <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+        <Button variant="outline" size="sm" onClick={() => setIsEditModalOpen(false)}>
+          Batal
+        </Button>
+        <Button variant="primary" size="sm" onClick={handleSaveRole} loading={saving}>
+          Simpan Perubahan
+        </Button>
+      </div>
     </div>
+  )}
+      </Modal >
+
+  {/* 2-Option Action Modal: Nonaktifkan OR Hapus Permanen */ }
+  < Modal
+isOpen = { isActionModalOpen }
+onClose = {() => setIsActionModalOpen(false)}
+title = "Opsi Pengelolaan / Penghapusan Akun"
+maxWidth = "max-w-lg"
+  >
+  { selectedUser && (
+    <div className="space-y-4">
+      {/* User card info */}
+      <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
+        <Avatar
+          src={selectedUser.avatar || selectedUser.avatar_url}
+          name={selectedUser.name}
+          size="md"
+          className="ring-1 ring-slate-300"
+        />
+        <div>
+          <p className="font-bold text-brand-dark text-sm">{selectedUser.name}</p>
+          <p className="text-xs text-slate-500">{selectedUser.email}</p>
+          <div className="mt-1 flex items-center gap-2">
+            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold ${isSelectedActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+              }`}>
+              {isSelectedActive ? 'Status: Aktif' : 'Status: Non-Aktif'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <p className="text-xs text-slate-600 font-medium">
+        Silakan tentukan tindakan yang ingin Anda lakukan terhadap akun ini:
+      </p>
+
+      {/* Pilihan 1: Nonaktifkan / Aktifkan */}
+      <div className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-start gap-2.5">
+          <Power className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isSelectedActive ? 'text-amber-600' : 'text-emerald-600'}`} />
+          <div>
+            <h4 className="text-xs font-bold text-slate-800">
+              {isSelectedActive ? '1. Nonaktifkan Akun (Soft)' : '1. Aktifkan Kembali Akun'}
+            </h4>
+            <p className="text-[11px] text-slate-600 mt-0.5 leading-snug">
+              {isSelectedActive
+                ? 'Mematikan hak akses login sementara. Data riwayat akun tetap aman.'
+                : 'Mengaktifkan kembali hak akses login pengguna.'}
+            </p>
+          </div>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className={isSelectedActive ? 'text-amber-800 border-amber-300 hover:bg-amber-100 whitespace-nowrap' : 'text-emerald-800 border-emerald-300 hover:bg-emerald-100 whitespace-nowrap'}
+          onClick={handleToggleStatus}
+          loading={saving}
+        >
+          {isSelectedActive ? 'Nonaktifkan' : 'Aktifkan'}
+        </Button>
+      </div>
+
+      {/* Pilihan 2: Hapus Permanen */}
+      <div className="p-3.5 rounded-xl border border-red-200 bg-red-50/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-start gap-2.5">
+          <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <h4 className="text-xs font-bold text-red-900">
+              2. Hapus Permanen (*Delete*)
+            </h4>
+            <p className="text-[11px] text-red-700 mt-0.5 leading-snug">
+              Menghapus data akun secara permanen dari database MySQL. Tindakan ini tidak dapat dibatalkan.
+            </p>
+          </div>
+        </div>
+        <Button
+          type="button"
+          variant="primary"
+          size="sm"
+          className="!bg-red-600 hover:!bg-red-700 text-white whitespace-nowrap"
+          onClick={handlePermanentDelete}
+          loading={saving}
+          icon={Trash2}
+        >
+          Hapus Permanen
+        </Button>
+      </div>
+
+      <div className="flex justify-end pt-2 border-t border-slate-100">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => setIsActionModalOpen(false)}
+          disabled={saving}
+        >
+          Tutup / Batal
+        </Button>
+      </div>
+    </div>
+  )}
+      </Modal >
+    </div >
   );
 }
 `;
