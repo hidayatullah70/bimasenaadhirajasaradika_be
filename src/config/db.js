@@ -89,7 +89,8 @@ async function autoInitDatabaseIfEmpty() {
         "(3, 'finance', 'Finance'), " +
         "(4, 'marketing', 'Marketing'), " +
         "(5, 'operasional', 'Operasional'), " +
-        "(6, 'it_support', 'IT Support') " +
+        "(6, 'it_support', 'IT Support'), " +
+        "(7, 'admin', 'Administrator') " +
         "ON DUPLICATE KEY UPDATE name = VALUES(name);"
       );
 
@@ -103,6 +104,21 @@ async function autoInitDatabaseIfEmpty() {
         );
         console.log('[Auto-Init] Akun IT Support (Gheril Ramaditya S.) berhasil disinkronkan ke database.');
       }
+      // Pastikan akun Admin (Hidayatullah) tersedia
+      const [adminUser] = await pool.query("SELECT id FROM users WHERE email = 'hidayatullah.ofc@gmail.com' LIMIT 1");
+      if (adminUser.length === 0) {
+        const bcrypt = require('bcryptjs');
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash('Merdek@122', salt);
+        await pool.query(
+          "INSERT INTO users (role_id, name, email, avatar_url, password_hash, is_active) " +
+          "VALUES (7, 'Hidayatullah', 'hidayatullah.ofc@gmail.com', '/assets/img/team/jusHidy3.png', ?, TRUE) " +
+          "ON DUPLICATE KEY UPDATE role_id = 7, name = VALUES(name), avatar_url = VALUES(avatar_url);",
+          [hash]
+        );
+        console.log('[Auto-Init] Akun Admin (Hidayatullah) berhasil disinkronkan ke database.');
+      }
+
 
       // Pastikan tabel it_assets dan it_tickets tersedia
       await pool.query(
